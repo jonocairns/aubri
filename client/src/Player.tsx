@@ -3,21 +3,31 @@ import { SvgPauseCircleOutline24Px } from './icons/PauseCircleOutline24Px';
 import { SvgPlayCircleOutline24Px } from './icons/PlayCircleOutline24Px';
 
 const useAudio = (url: string) => {
-  const [audio] = useState(new Audio(url));
+  const [audio, setAudio] = useState<undefined | HTMLAudioElement>(undefined);
   const [playing, setPlaying] = useState(false);
 
-  const toggle = () => setPlaying(!playing);
+  const toggle = () => {
+    if (audio === undefined) {
+      setAudio(new Audio(url));
+    }
+    setPlaying(!playing)
+  };
 
   useEffect(() => {
-    playing ? audio.play() : audio.pause();
+    playing ? audio && audio.play() : audio && audio.pause();
   },
     [playing]
   );
 
   useEffect(() => {
-    audio.addEventListener('ended', () => setPlaying(false));
+    audio && audio.addEventListener('ended', () => setPlaying(false));
     return () => {
-      audio.removeEventListener('ended', () => setPlaying(false));
+      if(audio) {
+        audio.pause();
+        audio.removeAttribute('src');
+        audio.removeEventListener('ended', () => setPlaying(false));
+        audio.load();
+      }
     };
   }, []);
 
