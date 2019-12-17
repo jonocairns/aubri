@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from "react";
+import { SvgPauseCircleOutline24Px } from './icons/PauseCircleOutline24Px';
+import { SvgPlayCircleOutline24Px } from './icons/PlayCircleOutline24Px';
 
 const useAudio = (url: string) => {
   const [audio] = useState(new Audio(url));
@@ -7,8 +9,8 @@ const useAudio = (url: string) => {
   const toggle = () => setPlaying(!playing);
 
   useEffect(() => {
-      playing ? audio.play() : audio.pause();
-    },
+    playing ? audio.play() : audio.pause();
+  },
     [playing]
   );
 
@@ -22,7 +24,7 @@ const useAudio = (url: string) => {
   return [playing, toggle];
 };
 
-const Player = ({ id, file }: { id: string, file: string}) => {
+const Player = ({ id, file }: { id: string, file: string }) => {
   const [playing, toggle] = useAudio(`http://localhost:6969/api/audio/play/${id}/${file}`);
 
   return (
@@ -33,7 +35,9 @@ const Player = ({ id, file }: { id: string, file: string}) => {
             Your browser does not support the
             <code>audio</code> element.
     </audio> */}
-      <button onClick={toggle as any}>{playing ? "Pause" : "Play"}</button>
+      <span className="text-white" style={{ cursor: 'pointer' }} onClick={toggle as any}>{playing ?
+        <SvgPauseCircleOutline24Px fill="white" height="28px" width="28px" /> :
+        <SvgPlayCircleOutline24Px fill="white" height="28px" width="28px" />}</span>
     </div>
   );
 };

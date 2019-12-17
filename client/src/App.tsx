@@ -1,17 +1,18 @@
 import React from 'react';
 import Grid from './Grid';
 import Detail from './Detail';
+import { Nav } from './Nav';
 import {
   BrowserRouter as Router,
   Switch,
-  Route,
-  Link
+  Route
 } from "react-router-dom";
 
 const App: React.FC = () => {
 
   return (
-    <div className="container-fluid">
+    <div className="container-fluid px-0">
+      <Nav />
       <Router>
         <Switch>
           <Route path="/detail/:id">

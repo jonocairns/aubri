@@ -12,6 +12,7 @@ export const play = async (req: any, res: any, next: any) => {
         const folder = (results.rows[0] as Audiobook).folder;
         const book = `${folder}/${file}`;
     
+        console.log(`playing ${book}`)
         var stat = fs.statSync(book);
         const range = req.headers.range;
         var readStream: any;

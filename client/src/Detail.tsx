@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Audiobook } from '../../server/contracts/audiobook';
 import { useParams } from 'react-router-dom';
 import Player from './Player';
+import { Crumb } from './Breadcrumb';
 
 const Detail: React.FC = () => {
     const [book, setBook] = useState<Audiobook | null>(null);
@@ -24,7 +25,8 @@ const Detail: React.FC = () => {
     }
 
     return (
-        <div className="d-flex mt-4">
+        <div className="container d-flex flex-wrap">
+            <div className="col-12"><Crumb items={[{ link: '/', label: 'Library' }, { link: `/${book.id}`, label: book.title, active: true }]}/></div>
             <div className="col-12 col-md-4">
                 <img src={book.image} className="img-fluid" />
             </div>
@@ -37,10 +39,13 @@ const Detail: React.FC = () => {
                 <p>{book.stars} with {book.ratings}</p>
                 <p>{book.runtime}</p>
 
+                <div className="list-group">
+                    {(book as any).files.map((f: string) => (
+                        <span className="list-group-item d-flex justify-content-between align-items-center text-white bg-dark">{f}<Player id={book.id} file={f} /></span>
+                    ))}
+                </div>
 
-                {(book as any).files.map((f: string) => (
-                    <>{f} - <Player id={book.id} file={f} /></>
-                ))}
+
             </div>
         </div>
     );
