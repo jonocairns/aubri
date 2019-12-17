@@ -11,7 +11,7 @@ import {
 const App: React.FC = () => {
 
   return (
-    <div className="container">
+    <div className="container-fluid">
       <Router>
         <Switch>
           <Route path="/detail/:id">

@@ -21,7 +21,14 @@ export default class Data {
 
     public async read(text: string, params: any) {
         const client = await this.pool.connect();
-        return await client.query(text, params);
+        try {
+            return await client.query(text, params);
+        } 
+        catch (e) {
+            console.log(e);
+        } finally {
+            client.release();
+        }
     }
 
     public async transaction(action: (client: PoolClient) => void) {

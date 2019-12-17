@@ -24,7 +24,7 @@ app.listen(6969, () => {
     console.log("[NodeJS] Application Listening on Port 6969");
 });
 
-app.get('/api/audio/play/:key', play);
+app.get('/api/audio/play/:id/:file', play);
 
 app.get('/api/audio', list);
 app.get('/api/audio/:id', item);

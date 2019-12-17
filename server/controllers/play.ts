@@ -4,11 +4,13 @@ var fs = require('fs');
 
 export const play = async (req: any, res: any, next: any) => {
     try {
-        var key = req.params.key;
-        console.log('hit')
-        const results = await data.read('SELECT * FROM audiobook WHERE id = $1', [key]);
+        const id = req.params.id;
+        const file = req.params.file;
+        const results = await data.read('SELECT * FROM audiobook WHERE id = $1', [id]);
     
-        const book = (results.rows[0] as Audiobook).filename;
+        
+        const folder = (results.rows[0] as Audiobook).folder;
+        const book = `${folder}/${file}`;
     
         var stat = fs.statSync(book);
         const range = req.headers.range;

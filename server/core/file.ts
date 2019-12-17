@@ -1,40 +1,31 @@
-import { readdir, stat } from 'fs';
-import { join } from 'path';
-import { promisify } from 'util';
+import { readdirSync, statSync } from 'fs';
+import { join, normalize } from 'path';
 import { data } from '../server';
 import crypto from 'crypto';
 import { Audiobook } from '../contracts/audiobook';
 import cheerio from 'cheerio';
 import axios from 'axios';
+import { CONSTANTS } from '../constants';
 
-const readdirP = promisify(readdir)
-const statP = promisify(stat)
 
-const readDirAsync = async (dir: string, allFiles: Array<string> = []) => {
-    const files = (await readdirP(dir)).map(f => join(dir, f));
-    allFiles.push(...files);
-    await Promise.all(
-        files.map(
-            async f => (await statP(f)).isDirectory() && readDirAsync(f, allFiles)
-        )
-    );
-    return allFiles.filter(f => f.indexOf('.mp3') > -1);
-}
+const dirs = (path: string) => readdirSync(path)
+    .filter(f => statSync(join(path, f))
+    .isDirectory())
 
-const fileSync = async () => {
+const fileSync = () => {
     // check if there are any new files...
-    const path = join(__dirname, '../music');
+    const path = join(__dirname, `../${CONSTANTS.folderPath}`);
     console.log(`checking path: ${path}`);
-    const files = await readDirAsync(path);
+    const files = dirs(path);
     console.log(`found ${files.length} files...`);
-    return files;
+    return files.map(f => normalize(`${path}/${f}`));
 };
 
 const schema = [
     { column: 'id', type: 'text', isNull: false },
     { column: 'title', type: 'text', isNull: false },
     { column: 'subtitle', type: 'text', isNull: false },
-    { column: 'fileName', type: 'text', isNull: false },
+    { column: 'folder', type: 'text', isNull: false },
     { column: 'image', type: 'text', isNull: false },
     { column: 'author', type: 'text', isNull: false },
     { column: 'narrator', type: 'text', isNull: false },
@@ -46,8 +37,8 @@ const schema = [
 ];
 
 export const init = async () => {
-    const files = await fileSync();
-    const hashes = files.map(f => ({ fileName: f, hash: crypto.createHash('md5').update(f).digest('hex') }));
+    const files = fileSync();
+    const hashes = files.map(f => ({ folder: f, hash: crypto.createHash('md5').update(f).digest('hex') }));
 
     const exists = await data.read('SELECT EXISTS (SELECT 1 FROM information_schema.tables WHERE table_schema = $1 AND table_name = $2);', ['public', 'audiobook']);
 
@@ -68,8 +59,8 @@ export const init = async () => {
     const promises: Array<Promise<void>> = [];
 
     itemsNotInDb.forEach(item => {
-        console.log(`checking ${item.fileName}`);
-        const keywords = item.fileName.split('\\').pop().replace('.mp3', '').trim();
+        console.log(`checking ${item.folder}`);
+        const keywords = item.folder.split('\\').pop().replace('.mp3', '').trim();
         console.log(`hitting ${keywords}`);
 
         const promise = async () => {
@@ -77,8 +68,15 @@ export const init = async () => {
             const $ = cheerio.load(resp.data);
             const items = $('.productListItem');
 
-            const findTarget = (node: CheerioElement, target: string) => $(node).find(target)[0].children.pop().data;
-            const findMany = (node: CheerioElement, target: string) => $(node).find(target);
+            const findTarget = (node: Cheerio, target: string) => {
+                try {
+                    return $(node).find(target)[0].children.pop().data;
+                } catch (e) {
+                    console.log(`unable to find ${target} for ${item.folder}`);
+                    return '';
+                }
+            };
+            const findMany = (node: Cheerio, target: string) => $(node).find(target);
 
             const searchSchema = [
                 { name: 'year', target: '.releaseDateLabel span', multi: false },
@@ -96,29 +94,26 @@ export const init = async () => {
                     prop: 'id',
                     value: item.hash
                 }, {
-                    prop: 'fileName', 
-                    value: item.fileName
+                    prop: 'folder', 
+                    value: item.folder
                 }
             ];
 
-            items.toArray().forEach(node => {
-                // image is a snowflake.. :(
-                const item = $(node).find('.responsive-product-square img')[0].attribs['src'];
-                props.push({
-                    prop: 'image', value: item
-                });
-                console.log(item);
-                searchSchema.forEach(ss => {
-                    if (!ss.multi) {
-                        const item = findTarget(node, ss.target).split(':').pop().trim();
-                        console.log(`${ss.name}: ${item}`);
-                        props.push({ prop: ss.name, value: item });
-                    } else {
-                        const items = findMany(node, ss.target);
-                        const arr = items.toArray().map(d => d.children.map(c => c.data)).reduce((acc, val) => acc.concat(val), []);
-                        props.push({ prop: ss.name, value: arr.join(', ') });
-                    }
-                });
+            const img = $(items).find('.responsive-product-square img')[0].attribs['src'];
+            props.push({
+                prop: 'image', value: img
+            });
+
+            searchSchema.forEach(ss => {
+                if (!ss.multi) {
+                    const item = findTarget(items, ss.target).split(':').pop().trim();
+                    console.log(`${ss.name}: ${item}`);
+                    props.push({ prop: ss.name, value: item });
+                } else {
+                    const i = findMany(items, ss.target);
+                    const arr = i.toArray().map(d => d.children.map(c => c.data)).reduce((acc, val) => acc.concat(val), []);
+                    props.push({ prop: ss.name, value: arr.join(', ') });
+                }
             });
 
             data.transaction((client) => {

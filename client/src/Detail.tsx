@@ -38,7 +38,9 @@ const Detail: React.FC = () => {
                 <p>{book.runtime}</p>
 
 
-                {id && <Player id={id} />}
+                {(book as any).files.map((f: string) => (
+                    <>{f} - <Player id={book.id} file={f} /></>
+                ))}
             </div>
         </div>
     );

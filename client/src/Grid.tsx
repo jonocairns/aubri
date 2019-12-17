@@ -21,9 +21,9 @@ const Grid: React.FC = () => {
   }, []);
 
   return (
-    <div className="container">
+    <div className="d-flex flex-wrap mt-5 justify-content-center">
       {!loading && list.map(f =>
-        <div onClick={() => handleNav(f.id)} key={f.id} className="card" style={{ width: '18em' }}>
+        <div onClick={() => handleNav(f.id)} key={f.id} className="card m-2" style={{ width: '18em' }}>
           <img src={f.image} className="card-img-top" alt="..." />
           <div className="card-body">
             <h5 className="card-title">{f.title}</h5>

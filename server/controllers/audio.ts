@@ -1,4 +1,22 @@
 import { data } from '../server';
+import { Audiobook } from '../contracts/audiobook';
+import { promisify } from 'util';
+import { readdir, stat } from 'fs';
+import { join, basename } from 'path';
+
+const readdirP = promisify(readdir)
+const statP = promisify(stat)
+
+const readDirAsync = async (dir: string, allFiles: Array<string> = []) => {
+    const files = (await readdirP(dir)).map(f => join(dir, f));
+    allFiles.push(...files);
+    await Promise.all(
+        files.map(
+            async f => (await statP(f)).isDirectory() && readDirAsync(f, allFiles)
+        )
+    );
+    return allFiles.filter(f => f.indexOf('.mp3') > -1);
+}
 
 export const list = async (req: any, res: any) => {
     const d = await data.read('SELECT * FROM audiobook', []);
@@ -8,5 +26,12 @@ export const list = async (req: any, res: any) => {
 export const item = async (req: any, res: any) => {
     var id = req.params.id;
     const d = await data.read('SELECT * FROM audiobook WHERE id = $1', [id]);
-    res.json(d.rows[0]);
+    const row = d.rows[0] as Audiobook;
+    console.log(`reading ${row.folder}`);
+    const files = await readDirAsync(row.folder);
+
+    res.json({
+        ...row,
+        files: files.map(f => basename(f))
+    });
 };

@@ -2,7 +2,7 @@ export interface Audiobook {
     id: string;
     author: string;
     subtitle: string;
-    filename: string;
+    folder: string;
     image: string;
     title: string;
     year: number;

@@ -22,8 +22,8 @@ const useAudio = (url: string) => {
   return [playing, toggle];
 };
 
-const Player = ({ id }: { id: string}) => {
-  const [playing, toggle] = useAudio(`http://localhost:6969/api/audio/play/${id}`);
+const Player = ({ id, file }: { id: string, file: string}) => {
+  const [playing, toggle] = useAudio(`http://localhost:6969/api/audio/play/${id}/${file}`);
 
   return (
     <div>
