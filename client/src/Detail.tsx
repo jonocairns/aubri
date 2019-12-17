@@ -40,8 +40,8 @@ const Detail: React.FC = () => {
                 <p>{book.runtime}</p>
 
                 <div className="list-group">
-                    {(book as any).files.map((f: string) => (
-                        <span className="list-group-item d-flex justify-content-between align-items-center text-white bg-dark">{f}<Player id={book.id} file={f} /></span>
+                    {(book as any).files.map((f: any) => (
+                        <Player name={f.file} id={book.id} file={f.file} duration={f.duration}/>
                     ))}
                 </div>
 

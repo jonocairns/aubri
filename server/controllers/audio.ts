@@ -1,8 +1,10 @@
 import { data } from '../server';
 import { Audiobook } from '../contracts/audiobook';
 import { promisify } from 'util';
-import { readdir, stat } from 'fs';
+import { readdir, stat, readFileSync } from 'fs';
 import { join, basename } from 'path';
+const getMP3Duration = require('get-mp3-duration')
+
 
 const readdirP = promisify(readdir)
 const statP = promisify(stat)
@@ -32,6 +34,15 @@ export const item = async (req: any, res: any) => {
 
     res.json({
         ...row,
-        files: files.map(f => basename(f))
+        files: files.map(f => {
+            const buffer = readFileSync(f)
+            const duration = getMP3Duration(buffer);
+
+            return (
+            {
+                file: basename(f),
+                duration
+            })
+        })
     });
 };

@@ -1,5 +1,6 @@
-import { data } from '../server';
+import { data, mem } from '../server';
 import { Audiobook } from '../contracts/audiobook';
+import crypto from 'crypto';
 var fs = require('fs');
 
 export const play = async (req: any, res: any, next: any) => {
@@ -58,5 +59,40 @@ export const play = async (req: any, res: any, next: any) => {
         });
     } catch(err) {
         console.log(err);
+    }
+}
+
+
+
+export const save = async (req: any, res: any, next: any) => {
+    const id = req.params.id;
+    const file = req.params.file;
+    const bytes = req.params.bytes;
+
+    // should do this by user as well...
+    const hash = crypto.createHash('md5').update(`${id}${file}`).digest('hex');
+
+    const items = await data.read('SELECT * FROM session WHERE hash = $1', [hash]);
+
+    if(items.rows.length === 0) {
+        await data.transaction(c => c.query('INSERT INTO session(hash,bytes) VALUES($1,$2)', [hash, bytes]));
+    } else {
+        await data.transaction(c => c.query('UPDATE session SET bytes = $2 WHERE hash = $1', [hash, bytes]));
+    }
+
+    res.sendStatus(200);
+}
+
+export const get = async (req: any, res: any, next: any) => {
+    const id = req.params.id;
+    const file = req.params.file;
+
+    const hash = crypto.createHash('md5').update(`${id}${file}`).digest('hex');
+
+    const {rows} = await data.read('SELECT * FROM session WHERE hash = $1', [hash]);
+    if(rows.length === 0) {
+        res.sendStatus(404);
+    } else {
+        res.json(rows[0]);
     }
 }

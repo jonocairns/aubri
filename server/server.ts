@@ -1,6 +1,6 @@
 import express from 'express';
 import cors from 'cors';
-import { play } from './controllers/play';
+import { play, save, get } from './controllers/play';
 import { list, item } from './controllers/audio';
 import Data from './core/data';
 import { init } from './core/file';
@@ -14,6 +14,9 @@ export const data = new Data();
     }
 })();
 
+export const mem = {
+} as any;
+
 var app = express();
 
 app.on('error', console.log);
@@ -25,6 +28,10 @@ app.listen(6969, () => {
 });
 
 app.get('/api/audio/play/:id/:file', play);
+
+app.get('/api/audio/save/:id/:file/:bytes', save);
+app.get('/api/audio/play/:id/:file/time', get);
+
 
 app.get('/api/audio', list);
 app.get('/api/audio/:id', item);
