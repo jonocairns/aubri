@@ -7,6 +7,7 @@ import {
   Switch,
   Route
 } from "react-router-dom";
+import { GlobalPlayer } from './components/player';
 
 const App: React.FC = () => {
 
@@ -23,6 +24,7 @@ const App: React.FC = () => {
           </Route>
         </Switch>
       </Router>
+      <GlobalPlayer />
     </div>
   );
 }

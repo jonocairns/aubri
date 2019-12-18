@@ -41,7 +41,7 @@ const Detail: React.FC = () => {
 
                 <div className="list-group">
                     {(book as any).files.map((f: any) => (
-                        <Player name={f.file} id={book.id} file={f.file} duration={f.duration}/>
+                        <Player title={f.file} id={book.id} file={f.file} duration={f.duration}/>
                     ))}
                 </div>
 
