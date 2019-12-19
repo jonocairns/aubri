@@ -5,8 +5,10 @@ import { PlayerActionTypes } from '../actions/playerStateAction';
 const initialState: PlayerState = {
     isPlaying: false,
     currentTime: 0,
-    title: '',
-    totalTime: 0
+    id: '',
+    file: '',
+    totalTime: 0,
+    audio: undefined
 }
 
 export const playerReducer =(
@@ -20,8 +22,10 @@ export const playerReducer =(
                 ...state,
                 isPlaying: action.payload.isPlaying,
                 currentTime: action.payload.currentTime,
-                title: action.payload.title,
-                totalTime: action.payload.totalTime
+                id: action.payload.id,
+                file: action.payload.file,
+                totalTime: action.payload.totalTime,
+                audio: action.payload.audio
             }
         case UPDATE_CURRENT_TIME:
             return {

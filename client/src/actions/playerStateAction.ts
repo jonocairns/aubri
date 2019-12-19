@@ -4,9 +4,11 @@ export interface PlayerAction {
     type: typeof PLAY | typeof PAUSE;
     payload: {
         isPlaying: boolean;
-        title: string;
+        id: string;
+        file: string;
         totalTime: number;
         currentTime: number;
+        audio: HTMLAudioElement;
     }
 }
 
