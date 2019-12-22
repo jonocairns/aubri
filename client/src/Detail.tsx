@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { Audiobook } from '../../server/contracts/audiobook';
 import { useParams } from 'react-router-dom';
 import Player from './Player';
 import { Crumb } from './Breadcrumb';
+import { Audiobook } from '../../server/core/schema';
 
 const Detail: React.FC = () => {
     const [book, setBook] = useState<Audiobook | null>(null);

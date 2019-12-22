@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { Audiobook } from '../../server/contracts/audiobook';
 import { useHistory } from 'react-router-dom';
+import { Audiobook } from '../../server/core/schema';
 
 const Grid: React.FC = () => {
   const [list, setList] = useState(new Array<Audiobook>());

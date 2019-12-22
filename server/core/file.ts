@@ -1,11 +1,11 @@
 import { readdirSync, statSync } from 'fs';
 import { join, normalize } from 'path';
-import { data } from '../server';
 import crypto from 'crypto';
-import { Audiobook } from '../contracts/audiobook';
 import cheerio from 'cheerio';
 import axios from 'axios';
 import { CONSTANTS } from '../constants';
+import { trans, query } from './data';
+import { Audiobook, validate } from './schema';
 
 
 const dirs = (path: string) => readdirSync(path)
@@ -21,35 +21,13 @@ const fileSync = () => {
     return files.map(f => normalize(`${path}/${f}`));
 };
 
-const schema = [
-    { column: 'id', type: 'text', isNull: false },
-    { column: 'title', type: 'text', isNull: false },
-    { column: 'subtitle', type: 'text', isNull: false },
-    { column: 'folder', type: 'text', isNull: false },
-    { column: 'image', type: 'text', isNull: false },
-    { column: 'author', type: 'text', isNull: false },
-    { column: 'narrator', type: 'text', isNull: false },
-    { column: 'runtime', type: 'text', isNull: false },
-    { column: 'language', type: 'text', isNull: false },
-    { column: 'stars', type: 'text', isNull: false },
-    { column: 'ratings', type: 'text', isNull: false },
-    { column: 'year', type: 'text', isNull: false }
-];
-
 export const init = async () => {
     const files = fileSync();
     const hashes = files.map(f => ({ folder: f, hash: crypto.createHash('md5').update(f).digest('hex') }));
 
-    const exists = await data.read('SELECT EXISTS (SELECT 1 FROM information_schema.tables WHERE table_schema = $1 AND table_name = $2);', ['public', 'audiobook']);
+    await validate();
 
-    if (!exists.rows[0].exists) {
-        console.log('audiobook table not found... creating...')
-        await data.transaction(async (client) => {
-            await client.query(`CREATE TABLE audiobook (${schema.map(s => `${s.column} ${s.type} ${!s.isNull ? 'NOT NULL' : ''}`)})`);
-        });
-    }
-
-    const dbItems = await data.read('SELECT * FROM audiobook', []);
+    const dbItems = await query('SELECT * FROM audiobook', []);
     const itemsNotInDb = hashes.filter(i => !(dbItems.rows as Array<Audiobook>).map(r => r.id).includes(i.hash));
 
     console.log(`found ${itemsNotInDb.length} items not in db...`);
@@ -72,23 +50,30 @@ export const init = async () => {
                 try {
                     return $(node).find(target)[0].children.pop().data;
                 } catch (e) {
-                    console.log(`unable to find ${target} for ${item.folder}`);
                     return '';
                 }
             };
             const findMany = (node: Cheerio, target: string) => $(node).find(target);
-
+        
             const searchSchema = [
-                { name: 'year', target: '.releaseDateLabel span', multi: false },
+                { name: 'year', target: '.releaseDateLabel span', multi: false, translate: (item: string): string => new Date(item).toISOString() },
                 { name: 'title', target: '.bc-list-item h3 a', multi: false },
                 { name: 'subtitle', target: '.subtitle span', multi: false },
                 { name: 'author', target: '.authorLabel span a', multi: true },
                 { name: 'narrator', target: '.narratorLabel span a', multi: false },
-                { name: 'runtime', target: '.runtimeLabel span', multi: false },
+                {
+                    name: 'runtime', target: '.runtimeLabel span', multi: false, translate: (searchItem: string): number => searchItem
+                        .split(' ')
+                        .filter(r => !isNaN(r as any))
+                        .map(a => Number(a))
+                        .map((a, i) => i === 0 ? a * 60 : a)
+                        .reduce((a, b) => a + b, 0) || 0
+                },
                 { name: 'language', target: '.languageLabel span', multi: false },
-                { name: 'stars', target: '.ratingsLabel .bc-pub-offscreen', multi: false },
-                { name: 'ratings', target: '.ratingsLabel .bc-color-secondary', multi: false },
-            ]
+                { name: 'stars', target: '.ratingsLabel .bc-pub-offscreen', multi: false, translate: (item: string): number => Number(item.split(' ').shift()) || 0 },
+                { name: 'ratings', target: '.ratingsLabel .bc-color-secondary', multi: false, translate: (item: string): number => Number(item.replace(/,/g, '').split(' ').shift()) || 0 },
+            ];
+
             const props: Array<{ prop: string, value: string }> = [
                 {
                     prop: 'id',
@@ -104,11 +89,42 @@ export const init = async () => {
                 prop: 'image', value: img
             });
 
+
+            const detailLink = $(items).find('.bc-list-item h3 a')[0].attribs['href'].split('?').shift();
+            const fullLink = `https://www.audible.com${detailLink}`;
+
+            props.push({
+                prop: 'link', value: fullLink
+            });
+
+            const detailResp = await axios.get(fullLink);
+            const targeter = cheerio.load(detailResp.data);
+
+            const description = targeter('.productPublisherSummary').find('.bc-text').html() || '';
+
+            props.push({
+                prop: 'description', value: description
+            });
+
+            props.push({
+                prop: 'lastUpdatedUtc', value: new Date().toISOString()
+            });
+
+            props.push({
+                prop: 'dateCreatedUtc', value: new Date().toISOString()
+            });
+
             searchSchema.forEach(ss => {
                 if (!ss.multi) {
-                    const item = findTarget(items, ss.target).split(':').pop().trim();
-                    console.log(`${ss.name}: ${item}`);
-                    props.push({ prop: ss.name, value: item });
+                    let item = findTarget(items, ss.target).split(':').pop().trim();
+
+                    if (ss.translate) {
+                        const transLatedItem = ss.translate(item);
+                        props.push({ prop: ss.name, value: transLatedItem as any });
+                    } else {
+                        props.push({ prop: ss.name, value: item });
+                    }
+
                 } else {
                     const i = findMany(items, ss.target);
                     const arr = i.toArray().map(d => d.children.map(c => c.data)).reduce((acc, val) => acc.concat(val), []);
@@ -116,7 +132,7 @@ export const init = async () => {
                 }
             });
 
-            data.transaction((client) => {
+            trans((client) => {
                 const queryText = `INSERT INTO audiobook(${props.map(p => p.prop)}) VALUES(${props.map((p, i) => `$${i + 1}`)})`;
                 client.query(queryText, props.map(p => p.value))
             });

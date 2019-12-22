@@ -1,13 +1,14 @@
-import { data, mem } from '../server';
-import { Audiobook } from '../contracts/audiobook';
 import crypto from 'crypto';
+import { query } from '../core/data';
+import { trans } from '../core/data';
+import { Audiobook } from '../core/schema';
 var fs = require('fs');
 
 export const play = async (req: any, res: any, next: any) => {
     try {
         const id = req.params.id;
         const file = req.params.file;
-        const results = await data.read('SELECT * FROM audiobook WHERE id = $1', [id]);
+        const results = await query('SELECT * FROM audiobook WHERE id = $1', [id]);
     
         
         const folder = (results.rows[0] as Audiobook).folder;
@@ -62,8 +63,6 @@ export const play = async (req: any, res: any, next: any) => {
     }
 }
 
-
-
 export const save = async (req: any, res: any, next: any) => {
     const id = req.params.id;
     const file = req.params.file;
@@ -72,12 +71,12 @@ export const save = async (req: any, res: any, next: any) => {
     // should do this by user as well...
     const hash = crypto.createHash('md5').update(`${id}${file}`).digest('hex');
 
-    const items = await data.read('SELECT * FROM session WHERE hash = $1', [hash]);
+    const items = await query('SELECT * FROM session WHERE id = $1', [hash]);
 
     if(items.rows.length === 0) {
-        await data.transaction(c => c.query('INSERT INTO session(hash,bytes) VALUES($1,$2)', [hash, bytes]));
+        await trans(c => c.query('INSERT INTO session(id,time) VALUES($1,$2)', [hash, bytes]));
     } else {
-        await data.transaction(c => c.query('UPDATE session SET bytes = $2 WHERE hash = $1', [hash, bytes]));
+        await trans(c => c.query('UPDATE session SET time = $2 WHERE id = $1', [hash, bytes]));
     }
 
     res.sendStatus(200);
@@ -89,10 +88,10 @@ export const get = async (req: any, res: any, next: any) => {
 
     const hash = crypto.createHash('md5').update(`${id}${file}`).digest('hex');
 
-    const {rows} = await data.read('SELECT * FROM session WHERE hash = $1', [hash]);
-    if(rows.length === 0) {
+    const result = await query('SELECT * FROM session WHERE id = $1', [hash]);
+    if(result || result.rows || result.rows.length === 0) {
         res.sendStatus(404);
     } else {
-        res.json(rows[0]);
+        res.json(result.rows[0]);
     }
 }

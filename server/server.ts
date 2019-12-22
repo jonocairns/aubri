@@ -2,9 +2,10 @@ import express from 'express';
 import cors from 'cors';
 import { play, save, get } from './controllers/play';
 import { list, item } from './controllers/audio';
-import Data from './core/data';
 import { init } from './core/file';
-export const data = new Data();
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 (async function main() {
     try {

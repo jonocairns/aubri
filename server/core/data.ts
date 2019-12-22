@@ -1,47 +1,34 @@
 import { Pool, PoolClient } from 'pg';
+import dotenv from 'dotenv';
 
-export interface Query<T> {
-    text: string;
-    values: Array<T>;
-    rowMode: string;
-}
+dotenv.config();
 
-export default class Data {
-    public pool: Pool;
+const pool = new Pool({
+    connectionString: process.env.DATABASE_URL,
+    ssl: process.env.DATABASE_SSL === 'true',
+});
 
-    constructor() {
-        this.pool = new Pool({
-            user: 'user',
-            host: 'localhost',
-            database: 'audi',
-            password: 'example',
-            port: 5432,
-        });
+export const query = async (text: string, params: Array<string>) => {
+    const client = await pool.connect();
+    try {
+        return pool.query(text, params);
+    }   catch (e) {
+        throw e;
+    } finally {
+        client.release();
     }
+};
 
-    public async read(text: string, params: any) {
-        const client = await this.pool.connect();
-        try {
-            return await client.query(text, params);
-        } 
-        catch (e) {
-            console.log(e);
-        } finally {
-            client.release();
-        }
+export const trans = async (fnc: (client: PoolClient) => void) => {
+    const client = await pool.connect()
+    try {
+        await client.query('BEGIN')
+        await fnc(client);
+        await client.query('COMMIT')
+    } catch (e) {
+        await client.query('ROLLBACK')
+        throw e
+    } finally {
+        client.release()
     }
-
-    public async transaction(action: (client: PoolClient) => void) {
-        const client = await this.pool.connect();
-        try {
-            await client.query('BEGIN');
-            action(client);
-            await client.query('COMMIT');
-        } catch (e) {
-            await client.query('ROLLBACK');
-            throw e;
-        } finally {
-            client.release();
-        }
-    }
-}
+};
