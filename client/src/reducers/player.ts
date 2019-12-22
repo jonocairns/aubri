@@ -8,7 +8,8 @@ const initialState: PlayerState = {
     id: '',
     file: '',
     totalTime: 0,
-    audio: undefined
+    audio: undefined,
+    title: ''
 }
 
 export const playerReducer =(
@@ -25,6 +26,7 @@ export const playerReducer =(
                 id: action.payload.id,
                 file: action.payload.file,
                 totalTime: action.payload.totalTime,
+                title: action.payload.title,
                 audio: action.payload.audio
             }
         case UPDATE_CURRENT_TIME:

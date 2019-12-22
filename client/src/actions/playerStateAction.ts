@@ -8,6 +8,7 @@ export interface PlayerAction {
         file: string;
         totalTime: number;
         currentTime: number;
+        title: string;
         audio: HTMLAudioElement;
     }
 }

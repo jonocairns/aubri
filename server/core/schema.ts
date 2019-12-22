@@ -24,6 +24,7 @@ export interface Audiobook {
     title: string;
     subtitle: string;
     image: string;
+    description: string;
     folder: string;
     author: string;
     narrator: string;

@@ -78,7 +78,7 @@ export const save = async (req: any, res: any, next: any) => {
     } else {
         await trans(c => c.query('UPDATE session SET time = $2 WHERE id = $1', [hash, bytes]));
     }
-
+    console.log(`saved ${id} ${file}`)
     res.sendStatus(200);
 }
 
@@ -89,7 +89,7 @@ export const get = async (req: any, res: any, next: any) => {
     const hash = crypto.createHash('md5').update(`${id}${file}`).digest('hex');
 
     const result = await query('SELECT * FROM session WHERE id = $1', [hash]);
-    if(result || result.rows || result.rows.length === 0) {
+    if(!result || !result.rows || result.rows.length === 0) {
         res.sendStatus(404);
     } else {
         res.json(result.rows[0]);

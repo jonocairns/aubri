@@ -34,6 +34,9 @@ const Detail: React.FC = () => {
                 <h3>{book.title}</h3>
 
                 <p>{book.subtitle}</p>
+
+                <div dangerouslySetInnerHTML={{__html: book.description}}></div>
+
                 <p>Written by: {book.author}</p>
                 <p>Narrated by: {book.narrator}</p>
                 <p>{book.stars} with {book.ratings}</p>

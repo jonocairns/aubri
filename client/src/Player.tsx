@@ -23,7 +23,7 @@ const Player = (props: PlayerProps) => {
     try {
       const response = await fetch(`http://localhost:6969/api/audio/play/${props.id}/${props.file}/time`);
       const d = await response.json();
-      dispatch({ type: UPDATE_TIME, payload: { time: d.bytes, id: fileId } } as TimeAction);
+      dispatch({ type: UPDATE_TIME, payload: { time: d.time, id: fileId } } as TimeAction);
     } catch (e) {
       console.log(e);
       console.log(`possibly could not find time... returning 0 index`)
@@ -51,7 +51,7 @@ const Player = (props: PlayerProps) => {
       audio.play();
     }
 
-    dispatch({ type: PLAY, payload: { currentTime: audio && audio.currentTime, isPlaying: !isPlaying, id: props.id, file: props.file, totalTime: props.duration, audio } } as PlayerAction);
+    dispatch({ type: PLAY, payload: { currentTime: audio && audio.currentTime, isPlaying: !isPlaying, id: props.id, file: props.file, totalTime: props.duration, audio, title: props.title } } as PlayerAction);
   };
 
   useEffect(() => {

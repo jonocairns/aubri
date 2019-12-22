@@ -4,6 +4,7 @@ export interface PlayerState {
     id: string;
     file: string
     totalTime: number;
+    title: string;
     audio: HTMLAudioElement | undefined;
 }
 
