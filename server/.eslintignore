@@ -1,0 +1,9 @@
+node_modules/
+dist
+**/*.snap
+*.yml
+*.json
+*.lock
+*.log
+*.md
+*.png

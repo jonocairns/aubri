@@ -1,0 +1,16 @@
+{
+    "editor.rulers": [
+        120
+    ],
+    "editor.formatOnSave": false,
+    "eslint.enable": true,
+    "eslint.workingDirectories": [ "./client", "./server" ],
+    // "eslint.workingDirectories": [
+    //     { "mode": "auto" }
+    // ],
+    "editor.codeActionsOnSave": {
+        "source.fixAll.eslint": true,
+        "eslint.format.enable": true
+    },
+    "typescript.tsdk": "node_modules/typescript/lib"
+}

@@ -1,22 +1,20 @@
+import {TimeActionTypes} from '../actions/timeStateAction';
+import {UPDATE_TIME} from '../constants/actionTypes';
+import {TimeState} from '../State';
 
-import { TimeState } from '../State';
-import { TimeActionTypes } from '../actions/timeStateAction';
-import { UPDATE_TIME } from '../constants/actionTypes';
+const initialState: TimeState = {};
 
-const initialState: TimeState = {
-}
-
-export const timeReducer =(
-    state = initialState,
-    action: TimeActionTypes
+export const timeReducer = (
+  state = initialState,
+  action: TimeActionTypes
 ): TimeState => {
-    switch (action.type) {
-        case UPDATE_TIME:
-        return {
-            ...state,
-            [action.payload.id]: action.payload.time
-        }
-        default:
-            return state;
-    }
-}
+  switch (action.type) {
+    case UPDATE_TIME:
+      return {
+        ...state,
+        [action.payload.id]: action.payload.time,
+      };
+    default:
+      return state;
+  }
+};

@@ -1,10 +1,11 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { SvgVolumeUp24Px } from '../icons/VolumeUp24Px';
-import { iconProps } from './GlobalPlayer';
-import { useDispatch, useSelector } from 'react-redux';
-import { State } from '../State';
-import { UPDATE_VOLUME } from '../constants/actionTypes';
-import { SvgVolumeMute24Px } from '../icons/VolumeMute24Px';
+import React, {useEffect, useRef, useState} from 'react';
+import {useDispatch, useSelector} from 'react-redux';
+
+import {UPDATE_VOLUME} from '../constants/actionTypes';
+import {SvgVolumeMute24Px} from '../icons/VolumeMute24Px';
+import {SvgVolumeUp24Px} from '../icons/VolumeUp24Px';
+import {State} from '../State';
+import {iconProps} from './GlobalPlayer';
 
 const volumeHeight = 50;
 
@@ -24,49 +25,60 @@ export const Volume: React.FC = () => {
 
     const percent = 1 - (e.pageY - offSet) / volumeHeight;
 
-    dispatch({ type: UPDATE_VOLUME, volume: percent });
+    dispatch({type: UPDATE_VOLUME, volume: percent});
     setLocalVol(percent);
-  }
+  };
 
   const explicitSetVolume = (vol: number) => {
-    if(volume === 0) {
-      dispatch({ type: UPDATE_VOLUME, volume: localVol });
+    if (volume === 0) {
+      dispatch({type: UPDATE_VOLUME, volume: localVol});
     } else {
-      dispatch({ type: UPDATE_VOLUME, volume: vol });
+      dispatch({type: UPDATE_VOLUME, volume: vol});
     }
-  }
+  };
 
-  const handleClickOutside = (event: any) => {
-    if (ref.current && !ref.current.contains(event.target)) {
+  const handleClickOutside = (event: MouseEvent) => {
+    if (ref.current && !ref.current.contains(event.target as Node)) {
       setIsOpen(false);
     }
   };
 
   useEffect(() => {
-    document.addEventListener("mousedown", handleClickOutside);
+    document.addEventListener('mousedown', handleClickOutside);
     return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener('mousedown', handleClickOutside);
     };
   });
 
   return (
     <div ref={ref} className="d-flex flex-row">
       <div>
-        {isOpen &&
-
+        {isOpen && (
           <div
             id="volume"
-
             className="position-absolute d-flex align-items-end bg-dark"
             onClick={setVolume}
-            style={{ top: '-60px', right: '35px', width: '10px', height: `${volumeHeight}px`, cursor: 'pointer', opacity: 0.8 }}
+            style={{
+              top: '-60px',
+              right: '35px',
+              width: '10px',
+              height: `${volumeHeight}px`,
+              cursor: 'pointer',
+              opacity: 0.8,
+            }}
           >
-            <div className="w-100 bg-warning" style={{ height: `${volume * 100}%` }}></div>
-          </div>}
-        <SvgVolumeMute24Px {...iconProps} onClick={() => explicitSetVolume(0)} />
-
+            <div
+              className="w-100 bg-warning"
+              style={{height: `${volume * 100}%`}}
+            ></div>
+          </div>
+        )}
+        <SvgVolumeMute24Px
+          {...iconProps}
+          onClick={() => explicitSetVolume(0)}
+        />
       </div>
       <SvgVolumeUp24Px {...iconProps} onClick={toggle} />
     </div>
   );
-}
+};

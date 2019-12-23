@@ -1,11 +1,11 @@
+import {combineReducers} from 'redux';
 
-import { combineReducers } from 'redux';
-import { playerReducer } from './player';
-import { timeReducer } from './time';
+import {playerReducer} from './player';
+import {timeReducer} from './time';
 
 export const rootReducer = combineReducers({
   player: playerReducer,
-  times: timeReducer
-})
+  times: timeReducer,
+});
 
-export type RootState = ReturnType<typeof rootReducer>
+export type RootState = ReturnType<typeof rootReducer>;

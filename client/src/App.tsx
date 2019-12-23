@@ -1,16 +1,12 @@
 import React from 'react';
-import Grid from './Grid';
+import {BrowserRouter as Router, Route, Switch} from 'react-router-dom';
+
+import {GlobalPlayer} from './components/GlobalPlayer';
 import Detail from './Detail';
-import { Nav } from './Nav';
-import {
-  BrowserRouter as Router,
-  Switch,
-  Route
-} from "react-router-dom";
-import { GlobalPlayer } from './components/GlobalPlayer';
+import Grid from './Grid';
+import {Nav} from './Nav';
 
 const App: React.FC = () => {
-
   return (
     <div className="container-fluid px-0">
       <Nav />
@@ -27,6 +23,6 @@ const App: React.FC = () => {
       <GlobalPlayer />
     </div>
   );
-}
+};
 
 export default App;
