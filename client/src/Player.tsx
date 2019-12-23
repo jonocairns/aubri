@@ -30,35 +30,6 @@ const Player = (props: PlayerProps) => {
   ) as number;
   const [isLoading, setLoading] = useState(true);
 
-  const fetchData = async () => {
-    try {
-      const response = await fetch(
-        `http://localhost:6969/api/audio/play/${props.id}/${props.file}/time`
-      );
-      if (response.status === 200) {
-        const d = await response.json();
-        dispatch({
-          type: UPDATE_TIME,
-          payload: {time: d.time, id: fileId},
-        } as TimeAction);
-      } else {
-        dispatch({
-          type: UPDATE_TIME,
-          payload: {time: 0, id: fileId},
-        } as TimeAction);
-      }
-    } catch (e) {
-      console.log(e);
-      console.log(`possibly could not find time... returning 0 index`);
-      dispatch({
-        type: UPDATE_TIME,
-        payload: {time: 0, id: fileId},
-      } as TimeAction);
-    } finally {
-      setLoading(false);
-    }
-  };
-
   const play = async () => {
     const url = `http://localhost:6969/api/audio/play/${props.id}/${props.file}`;
 
@@ -82,8 +53,37 @@ const Player = (props: PlayerProps) => {
   };
 
   useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch(
+          `http://localhost:6969/api/audio/play/${props.id}/${props.file}/time`
+        );
+        if (response.status === 200) {
+          const d = await response.json();
+          dispatch({
+            type: UPDATE_TIME,
+            payload: {time: d.time, id: fileId},
+          } as TimeAction);
+        } else {
+          dispatch({
+            type: UPDATE_TIME,
+            payload: {time: 0, id: fileId},
+          } as TimeAction);
+        }
+      } catch (e) {
+        console.log(e);
+        console.log(`possibly could not find time... returning 0 index`);
+        dispatch({
+          type: UPDATE_TIME,
+          payload: {time: 0, id: fileId},
+        } as TimeAction);
+      } finally {
+        setLoading(false);
+      }
+    };
+
     fetchData();
-  }, []);
+  });
 
   const percent = (Number(time) / (props.duration / 1000)) * 100;
 

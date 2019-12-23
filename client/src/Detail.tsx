@@ -10,14 +10,14 @@ const Detail: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const {id} = useParams();
 
-  const fetchData = async () => {
-    const resp = await fetch(`http://localhost:6969/api/audio/${id}`);
-    const data = await resp.json();
-    setBook(data);
-    setLoading(false);
-  };
-
   useEffect(() => {
+    const fetchData = async () => {
+      const resp = await fetch(`http://localhost:6969/api/audio/${id}`);
+      const data = await resp.json();
+      setBook(data);
+      setLoading(false);
+    };
+
     fetchData();
   }, [id]);
 
