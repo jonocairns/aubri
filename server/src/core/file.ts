@@ -13,7 +13,7 @@ const dirs = (path: string) =>
 
 const fileSync = () => {
   // check if there are any new files...
-  const path = join(__dirname, `../${CONSTANTS.folderPath}`);
+  const path = join(__dirname, `../../${CONSTANTS.folderPath}`);
   console.log(`checking path: ${path}`);
   const files = dirs(path);
   console.log(`found ${files.length} files...`);
@@ -88,7 +88,7 @@ export const init = async () => {
           translate: (searchItem: string): number =>
             searchItem
               .split(' ')
-              .filter(r => !isNaN(r as any))
+              .filter(r => !isNaN(Number(r)))
               .map(a => Number(a))
               .map((a, i) => (i === 0 ? a * 60 : a))
               .reduce((a, b) => a + b, 0) || 0,
@@ -177,7 +177,7 @@ export const init = async () => {
 
           if (ss.translate) {
             const transLatedItem = ss.translate(item);
-            props.push({prop: ss.name, value: transLatedItem as any});
+            props.push({prop: ss.name, value: transLatedItem as string});
           } else {
             props.push({prop: ss.name, value: item});
           }

@@ -34,7 +34,7 @@
   "scripts": {
     "start": "nodemon",
     "build": "tsc",
-    "lint": "eslint --ext .{{t,j}s{,x}} /**/*",
+    "lint": "eslint src/**/* --ext .{{t,j}s{,x}}",
     "lint:fix": "yarn lint --fix"
   }
 }

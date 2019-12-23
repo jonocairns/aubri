@@ -1,3 +1,4 @@
+import {Request, Response} from 'express';
 import {readdir, readFileSync, stat} from 'fs';
 import {basename, join} from 'path';
 import {promisify} from 'util';
@@ -21,12 +22,16 @@ const readDirAsync = async (dir: string, allFiles: Array<string> = []) => {
   return allFiles.filter(f => f.indexOf('.mp3') > -1);
 };
 
-export const list = async (req: any, res: any) => {
+export const list = async (req: Request, res: Response) => {
   const d = await query('SELECT * FROM audiobook', []);
   res.json(d.rows);
 };
 
-export const item = async (req: any, res: any) => {
+interface ParamsDictionary {
+  [id: string]: string;
+}
+
+export const item = async (req: Request<ParamsDictionary>, res: Response) => {
   const id = req.params.id;
   const d = await query('SELECT * FROM audiobook WHERE id = $1', [id]);
   const row = d.rows[0] as Audiobook;

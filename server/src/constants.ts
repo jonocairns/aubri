@@ -1,3 +1,3 @@
 export const CONSTANTS = {
-  folderPath: 'music',
+  folderPath: 'data',
 };
