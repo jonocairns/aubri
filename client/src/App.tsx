@@ -7,7 +7,7 @@ import {
   Switch,
   Route
 } from "react-router-dom";
-import { GlobalPlayer } from './components/player';
+import { GlobalPlayer } from './components/GlobalPlayer';
 
 const App: React.FC = () => {
 

@@ -1,4 +1,4 @@
-import { PLAY, PAUSE, UPDATE_CURRENT_TIME, UPDATE_BUFFERED, UPDATE_DURATION, UPDATE_SRC as UPDATE_SRC } from '../constants/actionTypes';
+import { PLAY, PAUSE, UPDATE_CURRENT_TIME, UPDATE_BUFFERED, UPDATE_DURATION, UPDATE_SRC, UPDATE_VOLUME } from '../constants/actionTypes';
 
 export interface PlayerAction {
     type: typeof PLAY | typeof PAUSE;
@@ -19,6 +19,11 @@ export interface UpdateTimeAction {
     currentTime: number;
 }
 
+export interface UpdateVolumeAction {
+    type: typeof UPDATE_VOLUME;
+    volume: number;
+}
+
 export interface UpdateSrcAction {
     type: typeof UPDATE_SRC;
     src: string;
@@ -27,4 +32,4 @@ export interface UpdateSrcAction {
     title: string;
 }
 
-export type PlayerActionTypes = PlayerAction | UpdateTimeAction | UpdateBuffered | UpdateDuration | UpdateSrcAction;
+export type PlayerActionTypes = PlayerAction | UpdateTimeAction | UpdateBuffered | UpdateDuration | UpdateSrcAction | UpdateVolumeAction;

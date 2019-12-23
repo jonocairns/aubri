@@ -8,12 +8,20 @@ import { SvgPauseCircleOutline24Px } from '../icons/PauseCircleOutline24Px';
 import { SvgSkipPrevious24Px } from '../icons/SkipPrevious24Px';
 import { SvgSkipNext24Px } from '../icons/SkipNext24Px';
 import { PlayerAction } from '../actions/playerStateAction';
+import { Volume } from './Volume';
 
 const audioEvents = ["error", "progress", "play", "pause", "ended", "timeupdate", "loadedmetadata", "loadstart"];
 
+export const iconProps = {
+    fill: 'white',
+    fontSize: '32px',
+    className: 'mx-2',
+    style: { cursor: 'pointer' }
+}
+
 export const GlobalPlayer = () => {
     const dispatch = useDispatch();
-    const { id, file, playing, src, currentTime, duration, title } = useSelector((state: State) => state.player);
+    const { id, file, playing, src, currentTime, duration, title, volume } = useSelector((state: State) => state.player);
     const times = useSelector((state: State) => state.times);
     const [lastUpdated, setLastUpdated] = useState(0);
     const [audio, setAudio] = useState(new Audio());
@@ -78,6 +86,11 @@ export const GlobalPlayer = () => {
     }
 
     React.useEffect(() => {
+        console.log('updating volume...')
+        audio.volume = volume;
+    }, [volume]);
+
+    React.useEffect(() => {
         for (let e of audioEvents) {
             audio.addEventListener(e, handlePlayerEvent);
         }
@@ -122,13 +135,6 @@ export const GlobalPlayer = () => {
         }
     };
 
-    const iconProps = {
-        fill: 'white',
-        fontSize: '32px',
-        className: 'mx-2',
-        style: { cursor: 'pointer' }
-    }
-
     const onClickPercent = (e: any) => {
         const percentClick = e.clientX / window.innerWidth * 100;
         const seek = (duration / 1000) * (percentClick / 100);
@@ -151,7 +157,9 @@ export const GlobalPlayer = () => {
 
                 <SvgSkipNext24Px {...iconProps} />
             </div>
-            <div className="col-3"></div>
+            <div className="col-3">
+                <div className="d-flex justify-content-end"><Volume /></div>
+            </div>
         </div>
     </div> : null
 

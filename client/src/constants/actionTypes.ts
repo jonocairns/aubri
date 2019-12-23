@@ -10,3 +10,5 @@ export const UPDATE_TIME = 'UPDATE_TIME';
 
 export const UPDATE_SRC = 'UPDATE_SRC';
 
+export const UPDATE_VOLUME = 'UPDATE_VOLUME';
+

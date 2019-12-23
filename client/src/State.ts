@@ -7,6 +7,7 @@ export interface PlayerState {
     duration: number;
     src: string;
     title: string;
+    volume: number;
 }
 
 export interface TimeState {

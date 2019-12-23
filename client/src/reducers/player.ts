@@ -1,4 +1,4 @@
-import { PLAY, PAUSE, UPDATE_CURRENT_TIME, UPDATE_DURATION, UPDATE_BUFFERED, UPDATE_SRC } from '../constants/actionTypes';
+import { PLAY, PAUSE, UPDATE_CURRENT_TIME, UPDATE_DURATION, UPDATE_BUFFERED, UPDATE_SRC, UPDATE_VOLUME } from '../constants/actionTypes';
 import { PlayerState } from '../State';
 import { PlayerActionTypes } from '../actions/playerStateAction';
 
@@ -10,7 +10,8 @@ const initialState: PlayerState = {
     currentTime: 0,
     duration: 0,
     src: '',
-    title: ''
+    title: '',
+    volume: 1
 }
 
 export const playerReducer = (
@@ -42,6 +43,11 @@ export const playerReducer = (
             return {
                 ...state,
                 buffered: action.buffered
+            }
+        case UPDATE_VOLUME:
+            return {
+                ...state,
+                volume: action.volume
             }
         case UPDATE_SRC:
             return {
