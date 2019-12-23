@@ -9,7 +9,8 @@ const initialState: PlayerState = {
     buffered: 0,
     currentTime: 0,
     duration: 0,
-    src: ''
+    src: '',
+    title: ''
 }
 
 export const playerReducer = (
@@ -40,14 +41,15 @@ export const playerReducer = (
         case UPDATE_BUFFERED:
             return {
                 ...state,
-                duration: action.buffered
+                buffered: action.buffered
             }
         case UPDATE_SRC:
             return {
                 ...state,
                 src: action.src,
                 id: action.id,
-                file: action.file
+                file: action.file,
+                title: action.title
             }
         default:
             return state

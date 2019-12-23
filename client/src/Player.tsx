@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import { SvgPauseCircleOutline24Px } from './icons/PauseCircleOutline24Px';
 import { SvgPlayCircleOutline24Px } from './icons/PlayCircleOutline24Px';
 import { useDispatch, useSelector } from 'react-redux';
-import { PlayerAction } from './actions/playerStateAction';
 import { PLAY, UPDATE_TIME, UPDATE_SRC, PAUSE, UPDATE_DURATION } from './constants/actionTypes';
 import { State } from './State';
 import { TimeAction } from './actions/timeStateAction';
@@ -22,8 +21,12 @@ const Player = (props: PlayerProps) => {
   const fetchData = async () => {
     try {
       const response = await fetch(`http://localhost:6969/api/audio/play/${props.id}/${props.file}/time`);
-      const d = await response.json();
-      dispatch({ type: UPDATE_TIME, payload: { time: d.time, id: fileId } } as TimeAction);
+      if(response.status === 200) {
+        const d = await response.json();
+        dispatch({ type: UPDATE_TIME, payload: { time: d.time, id: fileId } } as TimeAction);
+      } else {
+        dispatch({ type: UPDATE_TIME, payload: { time: 0, id: fileId } } as TimeAction);
+      }
     } catch (e) {
       console.log(e);
       console.log(`possibly could not find time... returning 0 index`)
@@ -37,7 +40,7 @@ const Player = (props: PlayerProps) => {
     const url = `http://localhost:6969/api/audio/play/${props.id}/${props.file}`;
 
     if(src !== url) {
-      dispatch({ type: UPDATE_SRC, src: url, id: props.id, file: props.file, totalTime: props.duration});
+      dispatch({ type: UPDATE_SRC, src: url, id: props.id, file: props.file, title: props.title});
       dispatch({ type: UPDATE_DURATION, duration: props.duration});
       dispatch({type: PLAY});
     } else {
@@ -62,7 +65,7 @@ const Player = (props: PlayerProps) => {
         <div className="bg-warning" style={{ width: `${percent}%`, height: '100%', opacity: 0.1 }}></div>
       </div>
 
-      <span className="text-white" style={{ cursor: 'pointer', zIndex: 1 }} onClick={play as any}>{stateFileId === fileId ?
+      <span className="text-white" style={{ cursor: 'pointer', zIndex: 1 }} onClick={play as any}>{stateFileId === fileId && playing ?
         <SvgPauseCircleOutline24Px fill="white" height="28px" width="28px" /> :
         <SvgPlayCircleOutline24Px fill="white" height="28px" width="28px" />}</span>
     </div>

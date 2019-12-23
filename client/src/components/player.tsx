@@ -1,24 +1,21 @@
 import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { State } from '../State';
-import { PAUSE, UPDATE_BUFFERED, PLAY, UPDATE_CURRENT_TIME, UPDATE_DURATION, UPDATE_TIME } from '../constants/actionTypes';
+import { PAUSE, UPDATE_BUFFERED, PLAY, UPDATE_CURRENT_TIME, UPDATE_TIME } from '../constants/actionTypes';
 import { TimeAction } from '../actions/timeStateAction';
 import { SvgPlayCircleOutline24Px } from '../icons/PlayCircleOutline24Px';
 import { SvgPauseCircleOutline24Px } from '../icons/PauseCircleOutline24Px';
 import { SvgSkipPrevious24Px } from '../icons/SkipPrevious24Px';
 import { SvgSkipNext24Px } from '../icons/SkipNext24Px';
 import { PlayerAction } from '../actions/playerStateAction';
-import { title } from 'process';
-import { debounce } from 'lodash';
-
-let current: any = null;
 
 const audioEvents = ["error", "progress", "play", "pause", "ended", "timeupdate", "loadedmetadata", "loadstart"];
 
 export const GlobalPlayer = () => {
     const dispatch = useDispatch();
-    const { id, file, playing, src, currentTime, duration } = useSelector((state: State) => state.player);
+    const { id, file, playing, src, currentTime, duration, title } = useSelector((state: State) => state.player);
     const times = useSelector((state: State) => state.times);
+    const [lastUpdated, setLastUpdated] = useState(0);
     const [audio, setAudio] = useState(new Audio());
 
     const handlePlayerEvent = (evt: Event) => {
@@ -107,45 +104,55 @@ export const GlobalPlayer = () => {
 
     }, [src, playing]);
 
-    const percent = (Number(currentTime)) / (duration) * 100;
+    const percent = (Number(currentTime)) / (duration / 1000) * 100;
 
-    React.useEffect(() => debounce(() => {
-        if (currentTime !== 0 && playing) {
+    React.useEffect(() => {
+        if (Math.abs((currentTime - lastUpdated)) > 2 && currentTime !== 0 && playing) {
             fetch(`http://localhost:6969/api/audio/save/${id}/${file}/${currentTime}`);
+            setLastUpdated(currentTime);
             console.log(`saving time ${currentTime}`);
         }
-    }, 2000), [currentTime, id, file, playing])
+    }, [currentTime, id, file, playing])
 
     const toggle = () => {
-        dispatch({ type: PAUSE } as PlayerAction);
+        if (playing) {
+            dispatch({ type: PAUSE } as PlayerAction)
+        } else {
+            dispatch({ type: PLAY } as PlayerAction)
+        }
     };
-
-    console.log('rerender global player');
 
     const iconProps = {
         fill: 'white',
         fontSize: '32px',
-        className: 'mx-2'
+        className: 'mx-2',
+        style: { cursor: 'pointer' }
     }
 
-    return <div className="fixed-bottom bg-dark" style={{ opacity: 0.8 }}>
+    const onClickPercent = (e: any) => {
+        const percentClick = e.clientX / window.innerWidth * 100;
+        const seek = (duration / 1000) * (percentClick / 100);
+        audio.currentTime = seek;
+    }
 
-        {isFinite(percent) && <div className="w-100 px-0 mx-0" style={{ height: '3px' }}>
+    return title ? <div className="fixed-bottom bg-dark" style={{ opacity: 0.8 }}>
+
+        {isFinite(percent) && <div className="w-100 px-0 mx-0 pb-3"  onClick={onClickPercent} style={{ height: '3px', cursor: 'pointer' }}>
             <div className="bg-warning" style={{ width: `${percent}%`, height: '3px', opacity: 0.5 }}>
             </div>
         </div>}
         <div className="d-flex p-3 text-white">
-            <div className="col-3">{title}</div>
+            <div className="col-3"><div>{title}</div><div>{currentTime} / {duration}</div></div>
             <div className="col-6 d-flex justify-content-center">
                 <SvgSkipPrevious24Px {...iconProps} />
 
-                <SvgPauseCircleOutline24Px {...iconProps} onClick={toggle} />
-                <SvgPlayCircleOutline24Px {...iconProps} onClick={toggle} />
+                {playing ? <SvgPauseCircleOutline24Px {...iconProps} onClick={toggle} /> : <SvgPlayCircleOutline24Px {...iconProps} onClick={toggle} />}
+
 
                 <SvgSkipNext24Px {...iconProps} />
             </div>
             <div className="col-3"></div>
         </div>
-    </div>
+    </div> : null
 
 }

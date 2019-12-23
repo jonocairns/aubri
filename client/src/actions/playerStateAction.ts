@@ -24,6 +24,7 @@ export interface UpdateSrcAction {
     src: string;
     id: string;
     file: string;
+    title: string;
 }
 
 export type PlayerActionTypes = PlayerAction | UpdateTimeAction | UpdateBuffered | UpdateDuration | UpdateSrcAction;

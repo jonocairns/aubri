@@ -18,7 +18,7 @@ const Detail: React.FC = () => {
 
     useEffect(() => {
         fetchData();
-    }, []);
+    }, [id]);
 
     if (loading || !book) {
         return null;
@@ -28,7 +28,7 @@ const Detail: React.FC = () => {
         <div className="container d-flex flex-wrap">
             <div className="col-12"><Crumb items={[{ link: '/', label: 'Library' }, { link: `/${book.id}`, label: book.title, active: true }]}/></div>
             <div className="col-12 col-md-4">
-                <img src={book.image} className="img-fluid" />
+                <img src={book.image} alt={book.title} className="img-fluid" />
             </div>
             <div className="col-12 col-md-8 text-light">
                 <h3>{book.title}</h3>
@@ -44,7 +44,7 @@ const Detail: React.FC = () => {
 
                 <div className="list-group">
                     {(book as any).files.map((f: any) => (
-                        <Player title={f.file} id={book.id} file={f.file} duration={f.duration}/>
+                        <Player key={book.id + f.file} title={f.file} id={book.id} file={f.file} duration={f.duration}/>
                     ))}
                 </div>
 

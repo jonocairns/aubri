@@ -10,7 +10,7 @@ export const Nav = () => {
     return (
         <div>
             <Navbar color="faded" dark className="bg-dark px-4" expand="md">
-                <NavbarBrand href="/" className="mr-auto"><img src={headphones} width="40px" /></NavbarBrand>
+                <NavbarBrand href="/" className="mr-auto"><img src={headphones} alt="logo" width="40px" /></NavbarBrand>
                 <NavbarToggler onClick={toggleNavbar} className="mr-2" />
                 <Collapse isOpen={!collapsed} navbar>
                     <BsNav navbar className="d-flex ml-auto">

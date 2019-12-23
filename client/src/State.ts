@@ -6,6 +6,7 @@ export interface PlayerState {
     currentTime: number;
     duration: number;
     src: string;
+    title: string;
 }
 
 export interface TimeState {
