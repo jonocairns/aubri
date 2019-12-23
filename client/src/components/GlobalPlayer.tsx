@@ -1,7 +1,6 @@
 import React, {useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 
-import {PlayerAction} from '../actions/playerStateAction';
 import {TimeAction} from '../actions/timeStateAction';
 import {
   PAUSE,
@@ -49,7 +48,7 @@ export const GlobalPlayer = () => {
   } = useSelector((state: State) => state.player);
   const times = useSelector((state: State) => state.times);
   const [lastUpdated, setLastUpdated] = useState(0);
-  const [audio, setAudio] = useState(new Audio());
+  const [audio] = useState(new Audio());
 
   const updateProgress = () => {
     const range = audio.buffered;
@@ -124,7 +123,7 @@ export const GlobalPlayer = () => {
   React.useEffect(() => {
     console.log('updating volume...');
     audio.volume = volume;
-  }, [volume]);
+  }, [volume, audio.volume]);
 
   React.useEffect(() => {
     for (const e of audioEvents) {
@@ -138,6 +137,7 @@ export const GlobalPlayer = () => {
       }
       audio.src = '';
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id, file]);
 
   React.useEffect(() => {
@@ -148,6 +148,7 @@ export const GlobalPlayer = () => {
     } else {
       audio.pause();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [src, playing]);
 
   const percent = (Number(currentTime) / (duration / 1000)) * 100;
@@ -164,6 +165,7 @@ export const GlobalPlayer = () => {
       setLastUpdated(currentTime);
       console.log(`saving time ${currentTime}`);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentTime, id, file, playing]);
 
   const toggle = () => {
