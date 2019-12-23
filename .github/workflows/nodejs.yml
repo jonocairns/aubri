@@ -26,10 +26,10 @@ jobs:
       env:
         CI: true
     - name: server install, build, and test
-    working-directory: ./server
-    run: |
-      yarn install
-      yarn lint
-      yarn build
-    env:
-      CI: true
+      working-directory: ./server
+      run: |
+        yarn install
+        yarn lint
+        yarn build
+      env:
+        CI: true
