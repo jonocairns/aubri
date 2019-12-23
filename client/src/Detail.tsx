@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {useParams} from 'react-router-dom';
 
-import {Audiobook} from '../../server/core/schema';
+import {Audiobook} from '../../server/src/core/schema';
 import {Crumb} from './Breadcrumb';
 import Player from './Player';
 
