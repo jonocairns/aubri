@@ -1,41 +1,123 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { State } from '../State';
-import { UPDATE_TIME, PAUSE } from '../constants/actionTypes';
+import { PAUSE, UPDATE_BUFFERED, PLAY, UPDATE_CURRENT_TIME, UPDATE_DURATION, UPDATE_TIME } from '../constants/actionTypes';
 import { TimeAction } from '../actions/timeStateAction';
 import { SvgPlayCircleOutline24Px } from '../icons/PlayCircleOutline24Px';
 import { SvgPauseCircleOutline24Px } from '../icons/PauseCircleOutline24Px';
 import { SvgSkipPrevious24Px } from '../icons/SkipPrevious24Px';
 import { SvgSkipNext24Px } from '../icons/SkipNext24Px';
 import { PlayerAction } from '../actions/playerStateAction';
+import { title } from 'process';
+import { debounce } from 'lodash';
 
 let current: any = null;
 
+const audioEvents = ["error", "progress", "play", "pause", "ended", "timeupdate", "loadedmetadata", "loadstart"];
+
 export const GlobalPlayer = () => {
     const dispatch = useDispatch();
-    const { totalTime, currentTime, audio, id, file, isPlaying, title } = useSelector((state: State) => state.player);
+    const { id, file, playing, src, currentTime, duration } = useSelector((state: State) => state.player);
+    const times = useSelector((state: State) => state.times);
+    const [audio, setAudio] = useState(new Audio());
 
+    const handlePlayerEvent = (evt: Event) => {
+        console.log(`got event ${evt.type}`);
 
-    const percent = (Number(currentTime)) / (totalTime / 1000) * 100;
+        switch (evt.type) {
+            case "error":
+                // NowPlayingActions.setError(evt.srcElement.error);
+                console.log("Error received from Audio component:");
+                console.error(evt);
+                break;
+
+            case "progress":
+                var range = audio.buffered;
+                if (range.length > 0) {
+                    dispatch({ type: UPDATE_BUFFERED, buffered: range.end(range.length - 1) });
+                }
+                break;
+
+            case "play":
+                if (!playing) {
+                    dispatch({ type: PLAY });
+                }
+                break;
+
+            case "pause":
+                if (playing) {
+                    dispatch({ type: PAUSE });
+                }
+                break;
+
+            case "ended":
+                // NowPlayingActions.ended(NowPlayingStore.getSource(), NowPlayingStore.getRepeat());
+                break;
+
+            case "timeupdate":
+                dispatch({ type: UPDATE_CURRENT_TIME, currentTime: audio.currentTime });
+                dispatch({ type: UPDATE_TIME, payload: { time: audio.currentTime, id: id + file } } as TimeAction);
+                break;
+
+            case "loadedmetadata":
+                // dispatch({ type: UPDATE_DURATION, duration: audio.duration });
+                // fetch time here?
+                dispatch({ type: UPDATE_CURRENT_TIME, currentTime: audio.currentTime });
+                dispatch({ type: UPDATE_TIME, payload: { time: audio.currentTime, id: id + file } } as TimeAction);
+                if (playing) {
+                    audio.play();
+                }
+                break;
+
+            case "loadstart":
+                // NowPlayingActions.reset();
+                break;
+
+            default:
+                console.warn("unhandled player event:");
+                console.warn(evt);
+                break;
+        }
+    }
 
     React.useEffect(() => {
-        current = setInterval(async () => {
-            if (audio && audio.currentTime !== 0) {
-                await fetch(`http://localhost:6969/api/audio/save/${id}/${file}/${audio.currentTime}`);
-                dispatch({ type: UPDATE_TIME, payload: { time: audio.currentTime, id: id + file } } as TimeAction);
-                console.log(`saving time ${audio.currentTime}`);
-            }
-
-        }, 1000);
+        for (let e of audioEvents) {
+            audio.addEventListener(e, handlePlayerEvent);
+        }
 
         return () => {
-            clearInterval(current);
+            audio.pause();
+            for (let e of audioEvents) {
+                audio.removeEventListener(e, handlePlayerEvent);
+            }
+            audio.src = '';
         }
-    }, [audio, id, file])
+    }, [id, file]);
 
+
+    React.useEffect(() => {
+
+        if (playing) {
+            audio.src = src;
+            audio.currentTime = times[id + file] || 0
+            audio.play();
+        } else {
+            audio.pause();
+        }
+
+    }, [src, playing]);
+
+    const percent = (Number(currentTime)) / (duration) * 100;
+
+    React.useEffect(() => debounce(() => {
+        if (currentTime !== 0 && playing) {
+            fetch(`http://localhost:6969/api/audio/save/${id}/${file}/${currentTime}`);
+            console.log(`saving time ${currentTime}`);
+        }
+    }, 2000), [currentTime, id, file, playing])
 
     const toggle = () => {
-        dispatch({ type: PAUSE} as PlayerAction);
+        dispatch({ type: PAUSE } as PlayerAction);
     };
 
     console.log('rerender global player');
@@ -56,9 +138,9 @@ export const GlobalPlayer = () => {
             <div className="col-3">{title}</div>
             <div className="col-6 d-flex justify-content-center">
                 <SvgSkipPrevious24Px {...iconProps} />
-                {isPlaying ?
-                    <SvgPauseCircleOutline24Px {...iconProps} onClick={toggle} /> :
-                    <SvgPlayCircleOutline24Px {...iconProps} onClick={toggle} />}
+
+                <SvgPauseCircleOutline24Px {...iconProps} onClick={toggle} />
+                <SvgPlayCircleOutline24Px {...iconProps} onClick={toggle} />
 
                 <SvgSkipNext24Px {...iconProps} />
             </div>

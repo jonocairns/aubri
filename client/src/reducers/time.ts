@@ -1,6 +1,7 @@
-import { UPDATE_TIME } from '../constants/actionTypes';
+
 import { TimeState } from '../State';
 import { TimeActionTypes } from '../actions/timeStateAction';
+import { UPDATE_TIME } from '../constants/actionTypes';
 
 const initialState: TimeState = {
 }

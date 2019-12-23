@@ -1,11 +1,11 @@
 export interface PlayerState {
-    isPlaying: boolean;
-    currentTime: number;
     id: string;
-    file: string
-    totalTime: number;
-    title: string;
-    audio: HTMLAudioElement | undefined;
+    file: string;
+    playing: boolean;
+    buffered: number;
+    currentTime: number;
+    duration: number;
+    src: string;
 }
 
 export interface TimeState {

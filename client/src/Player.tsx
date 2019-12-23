@@ -3,7 +3,7 @@ import { SvgPauseCircleOutline24Px } from './icons/PauseCircleOutline24Px';
 import { SvgPlayCircleOutline24Px } from './icons/PlayCircleOutline24Px';
 import { useDispatch, useSelector } from 'react-redux';
 import { PlayerAction } from './actions/playerStateAction';
-import { PLAY, UPDATE_TIME } from './constants/actionTypes';
+import { PLAY, UPDATE_TIME, UPDATE_SRC, PAUSE, UPDATE_DURATION } from './constants/actionTypes';
 import { State } from './State';
 import { TimeAction } from './actions/timeStateAction';
 
@@ -13,7 +13,7 @@ interface PlayerProps {
 
 const Player = (props: PlayerProps) => {
   const dispatch = useDispatch();
-  let { audio, id, file, isPlaying } = useSelector((state: State) => state.player);
+  let { id, file, src, playing } = useSelector((state: State) => state.player);
   const fileId = props.id + props.file;
   const stateFileId = id + file;
   const time = useSelector((state: State) => props.id && state.times[props.id + props.file]) as number;
@@ -36,22 +36,17 @@ const Player = (props: PlayerProps) => {
   const play = async () => {
     const url = `http://localhost:6969/api/audio/play/${props.id}/${props.file}`;
 
-    if (stateFileId === fileId && isPlaying && audio) {
-      audio.pause();
-
-      audio.src = '';
+    if(src !== url) {
+      dispatch({ type: UPDATE_SRC, src: url, id: props.id, file: props.file, totalTime: props.duration});
+      dispatch({ type: UPDATE_DURATION, duration: props.duration});
+      dispatch({type: PLAY});
     } else {
-      if (!audio) {
-        audio = new Audio(url);
+      if(playing) {
+        dispatch({type: PAUSE});
       } else {
-        audio.src = '';
-        audio.src = url;
+        dispatch({type: PLAY});
       }
-      audio.currentTime = time;
-      audio.play();
     }
-
-    dispatch({ type: PLAY, payload: { currentTime: audio && audio.currentTime, isPlaying: !isPlaying, id: props.id, file: props.file, totalTime: props.duration, audio, title: props.title } } as PlayerAction);
   };
 
   useEffect(() => {
@@ -67,7 +62,7 @@ const Player = (props: PlayerProps) => {
         <div className="bg-warning" style={{ width: `${percent}%`, height: '100%', opacity: 0.1 }}></div>
       </div>
 
-      <span className="text-white" style={{ cursor: 'pointer', zIndex: 1 }} onClick={play as any}>{stateFileId === fileId && isPlaying ?
+      <span className="text-white" style={{ cursor: 'pointer', zIndex: 1 }} onClick={play as any}>{stateFileId === fileId ?
         <SvgPauseCircleOutline24Px fill="white" height="28px" width="28px" /> :
         <SvgPlayCircleOutline24Px fill="white" height="28px" width="28px" />}</span>
     </div>
