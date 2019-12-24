@@ -8,6 +8,14 @@ const pool = new Pool({
   ssl: process.env.DATABASE_SSL === 'true',
 });
 
+export const buildInsertQuery = (
+  tableName: string,
+  props: Array<{prop: string; value: string | number}>
+) =>
+  `INSERT INTO ${tableName}(${props.map(p => p.prop)}) VALUES(${props.map(
+    (p, i) => `$${i + 1}`
+  )})`;
+
 export const query = async (text: string, params: Array<string>) => {
   const client = await pool.connect();
   try {

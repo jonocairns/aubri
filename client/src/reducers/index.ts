@@ -5,7 +5,7 @@ import {timeReducer} from './time';
 
 export const rootReducer = combineReducers({
   player: playerReducer,
-  times: timeReducer,
+  time: timeReducer,
 });
 
 export type RootState = ReturnType<typeof rootReducer>;

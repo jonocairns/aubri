@@ -1,12 +1,17 @@
 import axios from 'axios';
 import cheerio from 'cheerio';
 import crypto from 'crypto';
+import ffmpeg, {FfprobeData} from 'fluent-ffmpeg';
 import {readdirSync, statSync} from 'fs';
-import {join, normalize} from 'path';
+import {basename, join, normalize} from 'path';
+import {promisify} from 'util';
 
 import {CONSTANTS} from '../constants';
-import {query, trans} from './data';
+import {readDirAsync} from '../controllers/audio';
+import {buildInsertQuery, query, trans} from './data';
 import {Audiobook, validate} from './schema';
+
+const probeP = promisify(ffmpeg.ffprobe);
 
 const dirs = (path: string) =>
   readdirSync(path).filter(f => statSync(join(path, f)).isDirectory());
@@ -191,14 +196,87 @@ export const init = async () => {
         }
       });
 
-      trans(client => {
-        const queryText = `INSERT INTO audiobook(${props.map(
-          p => p.prop
-        )}) VALUES(${props.map((p, i) => `$${i + 1}`)})`;
-        client.query(
-          queryText,
+      const files = await readDirAsync(item.folder);
+
+      const filePromises = files.map(async file => {
+        const meta = (await probeP(file)) as FfprobeData;
+
+        const hash = crypto
+          .createHash('md5')
+          .update(`${item.hash}${file}`)
+          .digest('hex');
+
+        const tags = meta.format.tags as {title?: string};
+
+        return [
+          {
+            prop: 'id',
+            value: hash,
+          },
+          {
+            prop: 'bookId',
+            value: item.hash,
+          },
+          {
+            prop: 'duration',
+            value: meta.format.duration,
+          },
+          {
+            prop: 'size',
+            value: meta.format.size,
+          },
+          {
+            prop: 'bitrate',
+            value: meta.format.bit_rate,
+          },
+          {
+            prop: 'format',
+            value: meta.format.format_name,
+          },
+          {
+            prop: 'dateCreatedUtc',
+            value: new Date().toISOString(),
+          },
+          {
+            prop: 'lastUpdatedUtc',
+            value: new Date().toISOString(),
+          },
+          {
+            prop: 'location',
+            value: file,
+          },
+          {
+            prop: 'fileName',
+            value: basename(file),
+          },
+          {
+            prop: 'title',
+            value: (tags && tags.title) || '',
+          },
+        ];
+      });
+
+      const fileData = await Promise.all(filePromises);
+
+      await trans(async client => {
+        const audioBookQuery = buildInsertQuery('audiobook', props);
+
+        await client.query('SET search_path TO schema,public;');
+
+        await client.query(
+          audioBookQuery,
           props.map(p => p.value)
         );
+
+        const fileDataPromises = fileData.map(async fd => {
+          const fileQuery = buildInsertQuery('file', fd);
+          await client.query(
+            fileQuery,
+            fd.map(p => p.value)
+          );
+        });
+
+        await Promise.all(fileDataPromises);
       });
     };
 

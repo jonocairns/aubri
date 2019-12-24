@@ -1,11 +1,15 @@
 import React, {useEffect, useState} from 'react';
+import {useDispatch} from 'react-redux';
 import {useParams} from 'react-router-dom';
 
-import {Audiobook} from '../../server/src/core/schema';
+import {Audiobook, File} from '../../server/src/core/schema';
+import {HydrateTimeAction} from './actions/timeStateAction';
 import {Crumb} from './Breadcrumb';
+import {HYDRATE_SESSIONS} from './constants/actionTypes';
 import Player from './Player';
 
 const Detail: React.FC = () => {
+  const dispatch = useDispatch();
   const [book, setBook] = useState<Audiobook | null>(null);
   const [loading, setLoading] = useState(true);
   const {id} = useParams();
@@ -14,6 +18,12 @@ const Detail: React.FC = () => {
     const fetchData = async () => {
       const resp = await fetch(`http://localhost:6969/api/audio/${id}`);
       const data = await resp.json();
+
+      dispatch({
+        type: HYDRATE_SESSIONS,
+        sessions: data.sessions,
+      } as HydrateTimeAction);
+
       setBook(data);
       setLoading(false);
     };
@@ -53,12 +63,11 @@ const Detail: React.FC = () => {
         <p>{book.runtime}</p>
 
         <div className="list-group">
-          {(book as any).files.map((f: any) => (
+          {(book as any).files.map((f: File) => (
             <Player
-              key={book.id + f.file}
-              title={f.file}
-              id={book.id}
-              file={f.file}
+              key={f.id}
+              title={f.filename}
+              fileId={f.id}
               duration={f.duration}
             />
           ))}

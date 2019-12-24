@@ -3,7 +3,7 @@ import {Request, Response} from 'express';
 import fs from 'fs';
 
 import {query, trans} from '../core/data';
-import {Audiobook} from '../core/schema';
+import {File} from '../core/schema';
 
 interface ParamsDictionary {
   [id: string]: string;
@@ -12,11 +12,9 @@ interface ParamsDictionary {
 export const play = async (req: Request<ParamsDictionary>, res: Response) => {
   try {
     const id = req.params.id;
-    const file = req.params.file;
-    const results = await query('SELECT * FROM audiobook WHERE id = $1', [id]);
+    const results = await query('SELECT * FROM file WHERE id = $1', [id]);
 
-    const folder = (results.rows[0] as Audiobook).folder;
-    const book = `${folder}/${file}`;
+    const book = (results.rows[0] as File).location;
 
     console.log(`playing ${book}`);
     const stat = fs.statSync(book);
@@ -72,40 +70,27 @@ export const play = async (req: Request<ParamsDictionary>, res: Response) => {
 
 export const save = async (req: Request<ParamsDictionary>, res: Response) => {
   const id = req.params.id;
-  const file = req.params.file;
-  const bytes = req.params.bytes;
+  const time = req.params.time;
 
-  // should do this by user as well...
-  const hash = crypto
-    .createHash('md5')
-    .update(`${id}${file}`)
-    .digest('hex');
-
-  const items = await query('SELECT * FROM session WHERE id = $1', [hash]);
+  const items = await query('SELECT * FROM session WHERE id = $1', [id]);
 
   if (items.rows.length === 0) {
     await trans(c =>
-      c.query('INSERT INTO session(id,time) VALUES($1,$2)', [hash, bytes])
+      c.query('INSERT INTO session(id,time) VALUES($1,$2)', [id, time])
     );
   } else {
     await trans(c =>
-      c.query('UPDATE session SET time = $2 WHERE id = $1', [hash, bytes])
+      c.query('UPDATE session SET time = $2 WHERE id = $1', [id, time])
     );
   }
-  console.log(`saved ${id} ${file}`);
+  console.log(`saved ${id}`);
   res.sendStatus(200);
 };
 
 export const get = async (req: Request<ParamsDictionary>, res: Response) => {
   const id = req.params.id;
-  const file = req.params.file;
 
-  const hash = crypto
-    .createHash('md5')
-    .update(`${id}${file}`)
-    .digest('hex');
-
-  const result = await query('SELECT * FROM session WHERE id = $1', [hash]);
+  const result = await query('SELECT * FROM session WHERE id = $1', [id]);
   if (!result || !result.rows || result.rows.length === 0) {
     res.sendStatus(404);
   } else {

@@ -35,8 +35,7 @@ export interface UpdateVolumeAction {
 export interface UpdateSrcAction {
   type: typeof UPDATE_SRC;
   src: string;
-  id: string;
-  file: string;
+  fileId: string;
   title: string;
 }
 

@@ -1,6 +1,7 @@
+import {Audiobook} from '../../server/src/core/schema';
+
 export interface PlayerState {
-  id: string;
-  file: string;
+  fileId: string;
   playing: boolean;
   buffered: number;
   currentTime: number;
@@ -10,11 +11,16 @@ export interface PlayerState {
   volume: number;
 }
 
+export interface BookState {
+  books: Array<{book: Audiobook; files: Array<string>}>;
+}
+
 export interface TimeState {
   [key: string]: number;
 }
 
 export interface State {
   player: PlayerState;
-  times: TimeState;
+  time: TimeState;
+  books: BookState;
 }

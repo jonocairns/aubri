@@ -1,5 +1,5 @@
 import {TimeActionTypes} from '../actions/timeStateAction';
-import {UPDATE_TIME} from '../constants/actionTypes';
+import {HYDRATE_SESSIONS, UPDATE_TIME} from '../constants/actionTypes';
 import {TimeState} from '../State';
 
 const initialState: TimeState = {};
@@ -9,6 +9,14 @@ export const timeReducer = (
   action: TimeActionTypes
 ): TimeState => {
   switch (action.type) {
+    case HYDRATE_SESSIONS:
+      return {
+        ...state,
+        ...Object.assign(
+          {},
+          ...action.sessions.map(s => ({[s.id]: Number(s.time)}))
+        ),
+      };
     case UPDATE_TIME:
       return {
         ...state,

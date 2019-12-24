@@ -11,8 +11,7 @@ import {
 import {PlayerState} from '../State';
 
 const initialState: PlayerState = {
-  id: '',
-  file: '',
+  fileId: '',
   playing: false,
   buffered: 0,
   currentTime: 0,
@@ -61,8 +60,7 @@ export const playerReducer = (
       return {
         ...state,
         src: action.src,
-        id: action.id,
-        file: action.file,
+        fileId: action.fileId,
         title: action.title,
       };
     default:

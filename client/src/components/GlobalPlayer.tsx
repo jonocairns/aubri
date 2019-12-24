@@ -37,8 +37,7 @@ export const iconProps = {
 export const GlobalPlayer = () => {
   const dispatch = useDispatch();
   const {
-    id,
-    file,
+    fileId,
     playing,
     src,
     currentTime,
@@ -46,7 +45,7 @@ export const GlobalPlayer = () => {
     title,
     volume,
   } = useSelector((state: State) => state.player);
-  const times = useSelector((state: State) => state.times);
+  const times = useSelector((state: State) => state.time);
   const [lastUpdated, setLastUpdated] = useState(0);
   const [audio] = useState(new Audio());
 
@@ -92,7 +91,7 @@ export const GlobalPlayer = () => {
         dispatch({type: UPDATE_CURRENT_TIME, currentTime: audio.currentTime});
         dispatch({
           type: UPDATE_TIME,
-          payload: {time: audio.currentTime, id: id + file},
+          payload: {time: audio.currentTime, id: fileId},
         } as TimeAction);
         break;
 
@@ -102,7 +101,7 @@ export const GlobalPlayer = () => {
         dispatch({type: UPDATE_CURRENT_TIME, currentTime: audio.currentTime});
         dispatch({
           type: UPDATE_TIME,
-          payload: {time: audio.currentTime, id: id + file},
+          payload: {time: audio.currentTime, id: fileId},
         } as TimeAction);
         if (playing) {
           audio.play();
@@ -138,12 +137,15 @@ export const GlobalPlayer = () => {
       audio.src = '';
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [id, file]);
+  }, [fileId]);
 
   React.useEffect(() => {
     if (playing) {
       audio.src = src;
-      audio.currentTime = times[id + file] || 0;
+      console.log(
+        `starting from .... ${fileId} ${times} ${times && times[fileId]}`
+      );
+      audio.currentTime = times[fileId] || 0;
       audio.play();
     } else {
       audio.pause();
@@ -151,7 +153,7 @@ export const GlobalPlayer = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [src, playing]);
 
-  const percent = (Number(currentTime) / (duration / 1000)) * 100;
+  const percent = (Number(currentTime) / duration) * 100;
 
   React.useEffect(() => {
     if (
@@ -159,14 +161,12 @@ export const GlobalPlayer = () => {
       currentTime !== 0 &&
       playing
     ) {
-      fetch(
-        `http://localhost:6969/api/audio/save/${id}/${file}/${currentTime}`
-      );
+      fetch(`http://localhost:6969/api/audio/save/${fileId}/${currentTime}`);
       setLastUpdated(currentTime);
       console.log(`saving time ${currentTime}`);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentTime, id, file, playing]);
+  }, [currentTime, fileId, playing]);
 
   const toggle = () => {
     if (playing) {
@@ -178,7 +178,7 @@ export const GlobalPlayer = () => {
 
   const onClickPercent = (e: React.MouseEvent) => {
     const percentClick = (e.clientX / window.innerWidth) * 100;
-    const seek = (duration / 1000) * (percentClick / 100);
+    const seek = duration * (percentClick / 100);
     audio.currentTime = seek;
   };
 

@@ -20,6 +20,8 @@ const App: React.FC = () => {
           </Route>
         </Switch>
       </Router>
+      {/* this div is to ensure the global player doesn't hang over existing content */}
+      <div style={{height: '120px'}}></div>
       <GlobalPlayer />
     </div>
   );
