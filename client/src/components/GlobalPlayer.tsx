@@ -67,7 +67,7 @@ export const GlobalPlayer = () => {
     }
   };
 
-  const traverse = (direction: Traverse) => {
+  const traverse = (direction: Traverse, play?: boolean) => {
     console.log('traversing');
 
     if (
@@ -107,8 +107,11 @@ export const GlobalPlayer = () => {
         title: nextFile.filename,
       });
       dispatch({type: UPDATE_DURATION, duration: nextFile.duration});
-
       dispatch({type: UPDATE_CURRENT_TIME, currentTime: audio.currentTime});
+
+      if (play) {
+        dispatch({type: PLAY});
+      }
     }
   };
 
@@ -137,7 +140,7 @@ export const GlobalPlayer = () => {
         break;
 
       case 'ended':
-        traverse(Traverse.FORWARD);
+        traverse(Traverse.FORWARD, true);
         break;
 
       case 'timeupdate':
