@@ -247,7 +247,9 @@ export const GlobalPlayer = () => {
         <div className="col-3">
           <div>{title}</div>
           <div>
-            {currentTime} / {duration}
+            {Math.floor(audio.currentTime / 60)}:
+            {Math.floor(audio.currentTime % 60)} / {Math.floor(duration / 60)}:
+            {Math.floor(duration % 60)}
           </div>
         </div>
         <div className="col-6 d-flex justify-content-center">
