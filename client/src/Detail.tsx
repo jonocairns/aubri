@@ -29,7 +29,7 @@ const Detail: React.FC = () => {
     };
 
     fetchData();
-  }, [id]);
+  }, [id, dispatch]);
 
   if (loading || !book) {
     return null;

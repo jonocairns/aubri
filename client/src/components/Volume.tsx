@@ -21,12 +21,20 @@ export const Volume: React.FC = () => {
   const setVolume = (e: React.MouseEvent) => {
     e.preventDefault();
     const el = document.getElementById('volume');
-    const offSet = el?.getBoundingClientRect().y || 0;
+    const offSet = el?.getBoundingClientRect().y;
 
-    const percent = 1 - (e.pageY - offSet) / volumeHeight;
+    if (offSet) {
+      const percent = 1 - (e.pageY - offSet) / volumeHeight;
 
-    dispatch({type: UPDATE_VOLUME, volume: percent});
-    setLocalVol(percent);
+      // TODO fix this... I think it doesnt take in to account the scroll position
+      if (percent - 1 > -1 && percent + 1 > 1) {
+        dispatch({type: UPDATE_VOLUME, volume: percent});
+        setLocalVol(percent);
+      }
+    }
+    console.log(
+      `getBoundingClientRect for volume element not found, ignoring volume set.`
+    );
   };
 
   const explicitSetVolume = (vol: number) => {
