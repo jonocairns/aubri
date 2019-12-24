@@ -75,7 +75,7 @@ export const GlobalPlayer = () => {
     if (direction === Traverse.BACKWARD) {
       nextPosition = currentPosition - 1;
     }
-    audio.currentTime = 0;
+
     const next =
       nextPosition <= queue.length - 1 && nextPosition >= 0
         ? nextPosition
@@ -84,9 +84,11 @@ export const GlobalPlayer = () => {
     const nextFile = queue[next];
 
     const url = `http://localhost:6969/api/audio/play/${nextFile.id}`;
-    setAudio(new Audio(url));
 
-    if (currentPosition !== nextPosition) {
+    if (currentPosition !== next) {
+      setAudio(new Audio(url));
+      audio.currentTime = 0;
+
       dispatch({
         type: UPDATE_SRC,
         src: url,
