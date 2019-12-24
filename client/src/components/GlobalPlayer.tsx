@@ -86,8 +86,9 @@ export const GlobalPlayer = () => {
     const url = `http://localhost:6969/api/audio/play/${nextFile.id}`;
 
     if (currentPosition !== next) {
-      setAudio(new Audio(url));
-      audio.currentTime = 0;
+      const newAudio = new Audio(url);
+      newAudio.currentTime = 0;
+      setAudio(newAudio);
 
       dispatch({
         type: UPDATE_SRC,
@@ -231,6 +232,18 @@ export const GlobalPlayer = () => {
     audio.currentTime = seek;
   };
 
+  const getTime = (time: number) => {
+    const mins = Math.floor(time / 60);
+    const secs = Math.floor(time % 60);
+    let display = `${mins}:`;
+    if (secs < 10) {
+      display = `${display}0${secs}`;
+    } else {
+      display = `${display}${secs}`;
+    }
+    return display;
+  };
+
   return title ? (
     <div className="fixed-bottom bg-dark" style={{opacity: 0.8}}>
       {isFinite(percent) && (
@@ -249,9 +262,7 @@ export const GlobalPlayer = () => {
         <div className="col-3">
           <div>{title}</div>
           <div>
-            {Math.floor(audio.currentTime / 60)}:
-            {Math.floor(audio.currentTime % 60)} / {Math.floor(duration / 60)}:
-            {Math.floor(duration % 60)}
+            {getTime(audio.currentTime)} / {getTime(duration)}
           </div>
         </div>
         <div className="col-6 d-flex justify-content-center">
