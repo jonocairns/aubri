@@ -7,6 +7,8 @@ import {
   PLAY,
   UPDATE_BUFFERED,
   UPDATE_CURRENT_TIME,
+  UPDATE_DURATION,
+  UPDATE_SRC,
   UPDATE_TIME,
 } from '../constants/actionTypes';
 import {SvgPauseCircleOutline24Px} from '../icons/PauseCircleOutline24Px';
@@ -34,6 +36,11 @@ export const iconProps = {
   style: {cursor: 'pointer'},
 };
 
+export enum Traverse {
+  FORWARD,
+  BACKWARD,
+}
+
 export const GlobalPlayer = () => {
   const dispatch = useDispatch();
   const {
@@ -44,10 +51,11 @@ export const GlobalPlayer = () => {
     duration,
     title,
     volume,
+    queue,
   } = useSelector((state: State) => state.player);
   const times = useSelector((state: State) => state.time);
   const [lastUpdated, setLastUpdated] = useState(0);
-  const [audio] = useState(new Audio());
+  const [audio, setAudio] = useState(new Audio());
 
   const updateProgress = () => {
     const range = audio.buffered;
@@ -56,6 +64,39 @@ export const GlobalPlayer = () => {
         type: UPDATE_BUFFERED,
         buffered: range.end(range.length - 1),
       });
+    }
+  };
+
+  const traverse = (direction: Traverse) => {
+    dispatch({type: PAUSE});
+    console.log('traversing');
+    const currentPosition = queue.findIndex(q => q.id === fileId);
+    let nextPosition = currentPosition + 1;
+    if (direction === Traverse.BACKWARD) {
+      nextPosition = currentPosition - 1;
+    }
+    audio.currentTime = 0;
+    const next =
+      nextPosition <= queue.length - 1 && nextPosition >= 0
+        ? nextPosition
+        : currentPosition;
+
+    const nextFile = queue[next];
+
+    const url = `http://localhost:6969/api/audio/play/${nextFile.id}`;
+    setAudio(new Audio(url));
+
+    if (currentPosition !== nextPosition) {
+      dispatch({
+        type: UPDATE_SRC,
+        src: url,
+        fileId: nextFile.id,
+        title: nextFile.filename,
+      });
+      dispatch({type: UPDATE_DURATION, duration: nextFile.duration});
+
+      dispatch({type: UPDATE_CURRENT_TIME, currentTime: audio.currentTime});
+      dispatch({type: PLAY});
     }
   };
 
@@ -84,7 +125,7 @@ export const GlobalPlayer = () => {
         break;
 
       case 'ended':
-        // NowPlayingActions.ended(NowPlayingStore.getSource(), NowPlayingStore.getRepeat());
+        traverse(Traverse.FORWARD);
         break;
 
       case 'timeupdate':
@@ -142,10 +183,16 @@ export const GlobalPlayer = () => {
   React.useEffect(() => {
     if (playing) {
       audio.src = src;
-      console.log(
-        `starting from .... ${fileId} ${times} ${times && times[fileId]}`
-      );
-      audio.currentTime = times[fileId] || 0;
+      let saved = times[fileId];
+
+      if (saved) {
+        if (Math.round(saved) === Math.round(duration)) {
+          saved = 0;
+        }
+      } else {
+        saved = 0;
+      }
+      audio.currentTime = saved;
       audio.play();
     } else {
       audio.pause();
@@ -204,7 +251,10 @@ export const GlobalPlayer = () => {
           </div>
         </div>
         <div className="col-6 d-flex justify-content-center">
-          <SvgSkipPrevious24Px {...iconProps} />
+          <SvgSkipPrevious24Px
+            {...iconProps}
+            onClick={() => traverse(Traverse.BACKWARD)}
+          />
 
           {playing ? (
             <SvgPauseCircleOutline24Px {...iconProps} onClick={toggle} />
@@ -212,7 +262,10 @@ export const GlobalPlayer = () => {
             <SvgPlayCircleOutline24Px {...iconProps} onClick={toggle} />
           )}
 
-          <SvgSkipNext24Px {...iconProps} />
+          <SvgSkipNext24Px
+            {...iconProps}
+            onClick={() => traverse(Traverse.FORWARD)}
+          />
         </div>
         <div className="col-3">
           <div className="d-flex justify-content-end">

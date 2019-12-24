@@ -5,6 +5,7 @@ import {
   UPDATE_BUFFERED,
   UPDATE_CURRENT_TIME,
   UPDATE_DURATION,
+  UPDATE_QUEUE,
   UPDATE_SRC,
   UPDATE_VOLUME,
 } from '../constants/actionTypes';
@@ -19,6 +20,7 @@ const initialState: PlayerState = {
   src: '',
   title: '',
   volume: 1,
+  queue: [],
 };
 
 export const playerReducer = (
@@ -55,6 +57,11 @@ export const playerReducer = (
       return {
         ...state,
         volume: action.volume,
+      };
+    case UPDATE_QUEUE:
+      return {
+        ...state,
+        queue: action.queue,
       };
     case UPDATE_SRC:
       return {

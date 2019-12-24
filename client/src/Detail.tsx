@@ -69,6 +69,7 @@ const Detail: React.FC = () => {
               title={f.filename}
               fileId={f.id}
               duration={f.duration}
+              queue={(book as any).files}
             />
           ))}
         </div>

@@ -1,4 +1,4 @@
-import {Audiobook} from '../../server/src/core/schema';
+import {Audiobook, File} from '../../server/src/core/schema';
 
 export interface PlayerState {
   fileId: string;
@@ -9,6 +9,7 @@ export interface PlayerState {
   src: string;
   title: string;
   volume: number;
+  queue: Array<File>;
 }
 
 export interface BookState {

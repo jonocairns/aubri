@@ -1,9 +1,11 @@
+import {File} from '../../../server/src/core/schema';
 import {
   PAUSE,
   PLAY,
   UPDATE_BUFFERED,
   UPDATE_CURRENT_TIME,
   UPDATE_DURATION,
+  UPDATE_QUEUE,
   UPDATE_SRC,
   UPDATE_VOLUME,
 } from '../constants/actionTypes';
@@ -32,6 +34,11 @@ export interface UpdateVolumeAction {
   volume: number;
 }
 
+export interface UpdateQueueAction {
+  type: typeof UPDATE_QUEUE;
+  queue: Array<File>;
+}
+
 export interface UpdateSrcAction {
   type: typeof UPDATE_SRC;
   src: string;
@@ -45,4 +52,5 @@ export type PlayerActionTypes =
   | UpdateBuffered
   | UpdateDuration
   | UpdateSrcAction
-  | UpdateVolumeAction;
+  | UpdateVolumeAction
+  | UpdateQueueAction;

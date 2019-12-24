@@ -1,10 +1,12 @@
 import React from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 
+import {File} from '../../server/src/core/schema';
 import {
   PAUSE,
   PLAY,
   UPDATE_DURATION,
+  UPDATE_QUEUE,
   UPDATE_SRC,
 } from './constants/actionTypes';
 import {SvgPauseCircleOutline24Px} from './icons/PauseCircleOutline24Px';
@@ -15,6 +17,7 @@ interface PlayerProps {
   fileId: string;
   title: string;
   duration: number;
+  queue: Array<File>;
 }
 
 const Player = (props: PlayerProps) => {
@@ -33,6 +36,10 @@ const Player = (props: PlayerProps) => {
         src: url,
         fileId: props.fileId,
         title: props.title,
+      });
+      dispatch({
+        type: UPDATE_QUEUE,
+        queue: props.queue,
       });
       dispatch({type: UPDATE_DURATION, duration: props.duration});
       dispatch({type: PLAY});

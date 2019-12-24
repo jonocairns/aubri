@@ -24,9 +24,8 @@ export const Volume: React.FC = () => {
     const offSet = el?.getBoundingClientRect().y;
 
     if (offSet) {
-      const percent = 1 - (e.pageY - offSet) / volumeHeight;
+      const percent = 1 - (e.clientY - offSet) / volumeHeight;
 
-      // TODO fix this... I think it doesnt take in to account the scroll position
       if (percent - 1 > -1 && percent + 1 > 1) {
         dispatch({type: UPDATE_VOLUME, volume: percent});
         setLocalVol(percent);
