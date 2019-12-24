@@ -68,8 +68,18 @@ export const GlobalPlayer = () => {
   };
 
   const traverse = (direction: Traverse) => {
-    dispatch({type: PAUSE});
     console.log('traversing');
+
+    if (
+      Math.floor(currentTime) > 0 &&
+      direction === Traverse.BACKWARD &&
+      playing
+    ) {
+      audio.currentTime = 0;
+      dispatch({type: UPDATE_CURRENT_TIME, currentTime: audio.currentTime});
+      return;
+    }
+
     const currentPosition = queue.findIndex(q => q.id === fileId);
     let nextPosition = currentPosition + 1;
     if (direction === Traverse.BACKWARD) {
@@ -99,7 +109,6 @@ export const GlobalPlayer = () => {
       dispatch({type: UPDATE_DURATION, duration: nextFile.duration});
 
       dispatch({type: UPDATE_CURRENT_TIME, currentTime: audio.currentTime});
-      dispatch({type: PLAY});
     }
   };
 
