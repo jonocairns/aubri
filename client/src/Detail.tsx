@@ -5,6 +5,7 @@ import {useParams} from 'react-router-dom';
 
 import {Audiobook, File} from '../../server/src/core/schema';
 import {HydrateTimeAction} from './actions/timeStateAction';
+import {useAuth0} from './Auth';
 import {Crumb} from './Breadcrumb';
 import {HYDRATE_SESSIONS} from './constants/actionTypes';
 import {Placeholder} from './Placeholder';
@@ -12,13 +13,17 @@ import Player from './Player';
 
 const Detail: React.FC = () => {
   const dispatch = useDispatch();
+  const {user} = useAuth0();
   const [book, setBook] = useState<Audiobook | null>(null);
   const [loading, setLoading] = useState(true);
   const {id} = useParams();
 
+  console.log(user);
   useEffect(() => {
     const fetchData = async () => {
-      const resp = await fetch(`http://localhost:6969/api/audio/${id}`);
+      const resp = await fetch(
+        `http://localhost:6969/api/audio/${id}/${user?.sub}`
+      );
       const data = await resp.json();
 
       dispatch({

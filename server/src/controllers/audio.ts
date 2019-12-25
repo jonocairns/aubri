@@ -1,7 +1,7 @@
+import crypto from 'crypto';
 import {Request, Response} from 'express';
-import ffmpeg from 'fluent-ffmpeg';
-import {readdir, readFileSync, stat} from 'fs';
-import {basename, join} from 'path';
+import {readdir, stat} from 'fs';
+import {join} from 'path';
 import {promisify} from 'util';
 
 import {query} from '../core/data';
@@ -9,7 +9,6 @@ import {Audiobook} from '../core/schema';
 
 const readdirP = promisify(readdir);
 const statP = promisify(stat);
-const probeP = promisify(ffmpeg.ffprobe);
 
 export const readDirAsync = async (
   dir: string,
@@ -49,17 +48,25 @@ interface ParamsDictionary {
   [id: string]: string;
 }
 
+export const strongHash = (input: string) =>
+  crypto
+    .createHash('sha512')
+    .update('testing')
+    .digest('hex');
+
 export const item = async (req: Request<ParamsDictionary>, res: Response) => {
   const id = req.params.id;
+  const userId = req.params.userId;
+  const hashedUserId = strongHash(userId);
+
   const d = await query('SELECT * FROM audiobook WHERE id = $1', [id]);
   const row = d.rows[0] as Audiobook;
 
   const {rows} = await query(`SELECT * FROM file WHERE bookId = $1`, [row.id]);
 
-  const session = await query(
-    `SELECT * FROM session WHERE id IN (SELECT id FROM file WHERE bookId = $1)`,
-    [row.id]
-  );
+  const session = await query(`SELECT * FROM session WHERE userId = $1`, [
+    hashedUserId,
+  ]);
 
   res.json({
     ...row,

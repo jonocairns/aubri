@@ -9,10 +9,12 @@ import {
   NavLink,
 } from 'reactstrap';
 
-import headphones from './images/headphones.png';
+import {useAuth0} from '../Auth';
+import headphones from '../images/headphones.png';
 
 export const Nav = () => {
   const [collapsed, setCollapsed] = useState(true);
+  const {isAuthenticated, loginWithRedirect, logout} = useAuth0();
 
   const toggleNavbar = () => setCollapsed(!collapsed);
 
@@ -26,12 +28,22 @@ export const Nav = () => {
         <Collapse isOpen={!collapsed} navbar>
           <BsNav navbar className="d-flex ml-auto">
             <NavItem>
-              <NavLink href="/components/">Users</NavLink>
-            </NavItem>
-            <NavItem>
-              <NavLink href="https://github.com/jonocairns/audi">
-                GitHub
-              </NavLink>
+              <div>
+                {!isAuthenticated && (
+                  <NavLink
+                    style={{cursor: 'pointer'}}
+                    onClick={() => loginWithRedirect({})}
+                  >
+                    Log in
+                  </NavLink>
+                )}
+
+                {isAuthenticated && (
+                  <NavLink style={{cursor: 'pointer'}} onClick={() => logout()}>
+                    Log out
+                  </NavLink>
+                )}
+              </div>
             </NavItem>
           </BsNav>
         </Collapse>

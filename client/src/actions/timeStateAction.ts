@@ -1,8 +1,8 @@
 import {Session} from '../../../server/src/core/schema';
-import {HYDRATE_SESSIONS, UPDATE_TIME} from '../constants/actionTypes';
+import {HYDRATE_SESSIONS, UPDATE_CURRENT_TIME} from '../constants/actionTypes';
 
 export interface TimeAction {
-  type: typeof UPDATE_TIME;
+  type: typeof UPDATE_CURRENT_TIME;
   payload: {id: string; time: number};
 }
 

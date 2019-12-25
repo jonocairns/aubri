@@ -25,14 +25,17 @@ const fileSync = () => {
   return files.map(f => normalize(`${path}/${f}`));
 };
 
+export const weakHash = (s: string) =>
+  crypto
+    .createHash('md5')
+    .update(s)
+    .digest('hex');
+
 export const init = async () => {
   const files = fileSync();
   const hashes = files.map(f => ({
     folder: f,
-    hash: crypto
-      .createHash('md5')
-      .update(f)
-      .digest('hex'),
+    hash: weakHash(f),
   }));
 
   await validate();
@@ -201,17 +204,14 @@ export const init = async () => {
       const filePromises = files.map(async file => {
         const meta = (await probeP(file)) as FfprobeData;
 
-        const hash = crypto
-          .createHash('md5')
-          .update(`${item.hash}${file}`)
-          .digest('hex');
+        const h = weakHash(`${item.hash}${file}`);
 
         const tags = meta.format.tags as {title?: string};
 
         return [
           {
             prop: 'id',
-            value: hash,
+            value: h,
           },
           {
             prop: 'bookId',

@@ -1,5 +1,6 @@
 import './style.scss';
 
+import {createBrowserHistory} from 'history';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import {Provider} from 'react-redux';
@@ -8,6 +9,7 @@ import {createLogger} from 'redux-logger';
 import thunk from 'redux-thunk';
 
 import App from './App';
+import {Auth0Provider} from './Auth';
 import {rootReducer} from './reducers/index';
 import * as serviceWorker from './serviceWorker';
 
@@ -24,10 +26,28 @@ const store = createStore(
   /* preloadedState, */ composeEnhancers(applyMiddleware(...middleware))
 );
 
+const history = createBrowserHistory();
+
+const onRedirectCallback = (appState: any) => {
+  history.push(
+    appState && appState.targetUrl
+      ? appState.targetUrl
+      : window.location.pathname
+  );
+};
+
+console.log(process.env.REACT_APP_AUTH0_DOMAIN);
 ReactDOM.render(
-  <Provider store={store}>
-    <App />
-  </Provider>,
+  <Auth0Provider
+    domain={process.env.REACT_APP_AUTH0_DOMAIN || ''}
+    client_id={process.env.REACT_APP_AUTH0_CLIENT_ID || ''}
+    redirect_uri={window.location.origin}
+    onRedirectCallback={onRedirectCallback}
+  >
+    <Provider store={store}>
+      <App />
+    </Provider>
+  </Auth0Provider>,
   document.getElementById('root')
 );
 

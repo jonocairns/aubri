@@ -1,5 +1,5 @@
 import {TimeActionTypes} from '../actions/timeStateAction';
-import {HYDRATE_SESSIONS, UPDATE_TIME} from '../constants/actionTypes';
+import {HYDRATE_SESSIONS, UPDATE_CURRENT_TIME} from '../constants/actionTypes';
 import {TimeState} from '../State';
 
 const initialState: TimeState = {};
@@ -14,10 +14,10 @@ export const timeReducer = (
         ...state,
         ...Object.assign(
           {},
-          ...action.sessions.map(s => ({[s.id]: Number(s.time)}))
+          ...action.sessions.map(s => ({[s.fileid]: Number(s.time)}))
         ),
       };
-    case UPDATE_TIME:
+    case UPDATE_CURRENT_TIME:
       return {
         ...state,
         [action.payload.id]: action.payload.time,

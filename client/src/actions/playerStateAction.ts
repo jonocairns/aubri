@@ -3,12 +3,12 @@ import {
   PAUSE,
   PLAY,
   UPDATE_BUFFERED,
-  UPDATE_CURRENT_TIME,
   UPDATE_DURATION,
   UPDATE_QUEUE,
   UPDATE_SRC,
   UPDATE_VOLUME,
 } from '../constants/actionTypes';
+import {TimeAction} from './timeStateAction';
 
 export interface PlayerAction {
   type: typeof PLAY | typeof PAUSE;
@@ -22,11 +22,6 @@ export interface UpdateBuffered {
 export interface UpdateDuration {
   type: typeof UPDATE_DURATION;
   duration: number;
-}
-
-export interface UpdateTimeAction {
-  type: typeof UPDATE_CURRENT_TIME;
-  currentTime: number;
 }
 
 export interface UpdateVolumeAction {
@@ -48,7 +43,7 @@ export interface UpdateSrcAction {
 
 export type PlayerActionTypes =
   | PlayerAction
-  | UpdateTimeAction
+  | TimeAction
   | UpdateBuffered
   | UpdateDuration
   | UpdateSrcAction

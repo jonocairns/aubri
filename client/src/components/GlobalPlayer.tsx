@@ -2,6 +2,7 @@ import React, {useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 
 import {TimeAction} from '../actions/timeStateAction';
+import {useAuth0} from '../Auth';
 import {
   PAUSE,
   PLAY,
@@ -44,6 +45,7 @@ export enum Traverse {
 }
 
 export const GlobalPlayer = () => {
+  const {user} = useAuth0();
   const dispatch = useDispatch();
   const {
     fileId,
@@ -130,15 +132,15 @@ export const GlobalPlayer = () => {
         break;
 
       case 'play':
-        if (!playing) {
-          dispatch({type: PLAY});
-        }
+        // if (!playing) {
+        //   dispatch({type: PLAY});
+        // }
         break;
 
       case 'pause':
-        if (playing) {
-          dispatch({type: PAUSE});
-        }
+        // if (playing) {
+        //   dispatch({type: PAUSE});
+        // }
         break;
 
       case 'ended':
@@ -146,9 +148,8 @@ export const GlobalPlayer = () => {
         break;
 
       case 'timeupdate':
-        dispatch({type: UPDATE_CURRENT_TIME, currentTime: audio.currentTime});
         dispatch({
-          type: UPDATE_TIME,
+          type: UPDATE_CURRENT_TIME,
           payload: {time: audio.currentTime, id: fileId},
         } as TimeAction);
         break;
@@ -156,9 +157,8 @@ export const GlobalPlayer = () => {
       case 'loadedmetadata':
         // dispatch({ type: UPDATE_DURATION, duration: audio.duration });
         // fetch time here?
-        dispatch({type: UPDATE_CURRENT_TIME, currentTime: audio.currentTime});
         dispatch({
-          type: UPDATE_TIME,
+          type: UPDATE_CURRENT_TIME,
           payload: {time: audio.currentTime, id: fileId},
         } as TimeAction);
         if (playing) {
@@ -225,7 +225,9 @@ export const GlobalPlayer = () => {
       currentTime !== 0 &&
       playing
     ) {
-      fetch(`http://localhost:6969/api/audio/save/${fileId}/${currentTime}`);
+      fetch(
+        `http://localhost:6969/api/audio/save/${fileId}/${user?.sub}/${currentTime}`
+      );
       setLastUpdated(currentTime);
       console.log(`saving time ${currentTime}`);
     }

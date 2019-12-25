@@ -1,9 +1,9 @@
-import crypto from 'crypto';
 import {Request, Response} from 'express';
 import fs from 'fs';
 
 import {query, trans} from '../core/data';
 import {File} from '../core/schema';
+import {strongHash} from './audio';
 
 interface ParamsDictionary {
   [id: string]: string;
@@ -70,30 +70,32 @@ export const play = async (req: Request<ParamsDictionary>, res: Response) => {
 
 export const save = async (req: Request<ParamsDictionary>, res: Response) => {
   const id = req.params.id;
+  const userId = req.params.userId;
   const time = req.params.time;
 
-  const items = await query('SELECT * FROM session WHERE id = $1', [id]);
+  const hashedUserId = strongHash(userId);
+
+  const items = await query(
+    'SELECT * FROM session WHERE userId = $1 AND fileId = $2',
+    [hashedUserId, id]
+  );
 
   if (items.rows.length === 0) {
     await trans(c =>
-      c.query('INSERT INTO session(id,time) VALUES($1,$2)', [id, time])
+      c.query('INSERT INTO session(userId,fileId,time) VALUES($1,$2,$3)', [
+        hashedUserId,
+        id,
+        time,
+      ])
     );
   } else {
     await trans(c =>
-      c.query('UPDATE session SET time = $2 WHERE id = $1', [id, time])
+      c.query(
+        'UPDATE session SET time = $1 WHERE userId = $2 AND fileId = $3',
+        [time, hashedUserId, id]
+      )
     );
   }
   console.log(`saved ${id}`);
   res.sendStatus(200);
-};
-
-export const get = async (req: Request<ParamsDictionary>, res: Response) => {
-  const id = req.params.id;
-
-  const result = await query('SELECT * FROM session WHERE id = $1', [id]);
-  if (!result || !result.rows || result.rows.length === 0) {
-    res.sendStatus(404);
-  } else {
-    res.json(result.rows[0]);
-  }
 };

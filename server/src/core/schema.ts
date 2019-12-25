@@ -2,7 +2,7 @@ import {query, trans} from './data';
 
 interface Schema {
   column: string;
-  type: 'text' | 'decimal' | 'integer' | 'date';
+  type: 'text' | 'decimal' | 'integer' | 'date' | 'serial';
   isNull?: boolean;
   isKey?: boolean;
   reference?: string;
@@ -44,12 +44,16 @@ export interface Audiobook {
 }
 
 const session: Array<Schema> = [
-  {column: 'id', type: 'text', isNull: false, isKey: true},
+  {column: 'id', type: 'serial', isNull: false, isKey: true},
+  {column: 'userId', type: 'text', isNull: false},
+  {column: 'fileId', type: 'text', isNull: false, reference: 'file(id)'},
   {column: 'time', type: 'decimal', isNull: false},
 ];
 
 export interface Session {
-  id: string;
+  id: number;
+  userId: string;
+  fileid: string;
   time: number;
 }
 
@@ -85,12 +89,12 @@ export const schema = [
     schema: audiobook,
   },
   {
-    name: 'session',
-    schema: session,
-  },
-  {
     name: 'file',
     schema: file,
+  },
+  {
+    name: 'session',
+    schema: session,
   },
 ];
 

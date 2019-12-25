@@ -41,7 +41,7 @@ export const playerReducer = (
     case UPDATE_CURRENT_TIME:
       return {
         ...state,
-        currentTime: action.currentTime,
+        currentTime: action.payload.time,
       };
     case UPDATE_DURATION:
       return {

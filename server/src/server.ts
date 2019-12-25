@@ -3,7 +3,7 @@ import dotenv from 'dotenv';
 import express from 'express';
 
 import {item, list} from './controllers/audio';
-import {get, play, save} from './controllers/play';
+import {play, save} from './controllers/play';
 import {init} from './core/file';
 
 dotenv.config();
@@ -28,8 +28,7 @@ app.listen(6969, () => {
 
 app.get('/api/audio/play/:id', play);
 
-app.get('/api/audio/save/:id/:time', save);
-app.get('/api/audio/play/:id/time', get);
+app.get('/api/audio/save/:id/:userId/:time', save);
 
 app.get('/api/audio', list);
-app.get('/api/audio/:id', item);
+app.get('/api/audio/:id/:userId', item);
