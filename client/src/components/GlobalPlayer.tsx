@@ -11,8 +11,10 @@ import {
   UPDATE_SRC,
   UPDATE_TIME,
 } from '../constants/actionTypes';
+import {SvgForward3024Px} from '../icons/Forward3024Px';
 import {SvgPauseCircleOutline24Px} from '../icons/PauseCircleOutline24Px';
 import {SvgPlayCircleOutline24Px} from '../icons/PlayCircleOutline24Px';
+import {SvgReplay3024Px} from '../icons/Replay3024Px';
 import {SvgSkipNext24Px} from '../icons/SkipNext24Px';
 import {SvgSkipPrevious24Px} from '../icons/SkipPrevious24Px';
 import {State} from '../State';
@@ -256,6 +258,18 @@ export const GlobalPlayer = () => {
     return display;
   };
 
+  const seek = (time: number) => {
+    const timeToSeekTo = audio.currentTime + time;
+
+    if (timeToSeekTo >= 0 && timeToSeekTo < duration) {
+      audio.currentTime = audio.currentTime + time;
+    } else if (timeToSeekTo <= 0) {
+      audio.currentTime = 0;
+    } else if (timeToSeekTo >= duration) {
+      audio.currentTime = duration;
+    }
+  };
+
   return title ? (
     <div className="fixed-bottom bg-dark" style={{opacity: 0.8}}>
       {isFinite(percent) && (
@@ -283,11 +297,15 @@ export const GlobalPlayer = () => {
             onClick={() => traverse(Traverse.BACKWARD)}
           />
 
+          <SvgReplay3024Px {...iconProps} onClick={() => seek(-30)} />
+
           {playing ? (
             <SvgPauseCircleOutline24Px {...iconProps} onClick={toggle} />
           ) : (
             <SvgPlayCircleOutline24Px {...iconProps} onClick={toggle} />
           )}
+
+          <SvgForward3024Px {...iconProps} onClick={() => seek(30)} />
 
           <SvgSkipNext24Px
             {...iconProps}
