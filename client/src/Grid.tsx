@@ -1,7 +1,9 @@
 import React, {useEffect, useState} from 'react';
+import Img from 'react-image';
 import {useHistory} from 'react-router-dom';
 
 import {Audiobook} from '../../server/src/core/schema';
+import {Placeholder} from './Placeholder';
 
 const Grid: React.FC = () => {
   const [list, setList] = useState(new Array<Audiobook>());
@@ -31,7 +33,14 @@ const Grid: React.FC = () => {
             className="card m-2"
             style={{width: '18em', cursor: 'pointer'}}
           >
-            <img src={f.image} className="card-img-top" alt="..." />
+            <Img
+              className="card-img-top"
+              src={f.image}
+              alt="..."
+              loader={<Placeholder />}
+            />
+
+            {/* <img src={f.image} className="card-img-top" alt="..." /> */}
             <div className="card-body">
               <h5 className="card-title">{f.title}</h5>
               <p className="card-text text-truncate">{f.subtitle}</p>

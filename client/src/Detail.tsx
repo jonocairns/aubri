@@ -1,4 +1,5 @@
 import React, {useEffect, useState} from 'react';
+import Img from 'react-image';
 import {useDispatch} from 'react-redux';
 import {useParams} from 'react-router-dom';
 
@@ -6,6 +7,7 @@ import {Audiobook, File} from '../../server/src/core/schema';
 import {HydrateTimeAction} from './actions/timeStateAction';
 import {Crumb} from './Breadcrumb';
 import {HYDRATE_SESSIONS} from './constants/actionTypes';
+import {Placeholder} from './Placeholder';
 import Player from './Player';
 
 const Detail: React.FC = () => {
@@ -46,7 +48,12 @@ const Detail: React.FC = () => {
         />
       </div>
       <div className="col-12 col-md-4">
-        <img src={book.image} alt={book.title} className="img-fluid" />
+        <Img
+          className="img-fluid"
+          src={book.image}
+          alt={book.title}
+          loader={<Placeholder />}
+        />
       </div>
       <div className="col-12 col-md-8 text-light">
         <h3>{book.title}</h3>
