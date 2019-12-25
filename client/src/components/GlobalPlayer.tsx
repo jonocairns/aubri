@@ -286,7 +286,7 @@ export const GlobalPlayer = () => {
       )}
       <div className="d-flex p-3 text-white">
         <div className="col-3">
-          <div>{title}</div>
+          <div className="text-truncate">{title}</div>
           <div>
             {getTime(audio.currentTime)} / {getTime(duration)}
           </div>
