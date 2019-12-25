@@ -10,7 +10,6 @@ import {
   UPDATE_CURRENT_TIME,
   UPDATE_DURATION,
   UPDATE_SRC,
-  UPDATE_TIME,
 } from '../constants/actionTypes';
 import {SvgForward3024Px} from '../icons/Forward3024Px';
 import {SvgPauseCircleOutline24Px} from '../icons/PauseCircleOutline24Px';
