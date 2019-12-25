@@ -284,14 +284,15 @@ export const GlobalPlayer = () => {
           ></div>
         </div>
       )}
-      <div className="d-flex p-3 text-white">
-        <div className="col-3">
-          <div className="text-truncate">{title}</div>
-          <div>
+      <div className="d-flex p-3 text-white flex-wrap">
+        <div className="col-12 col-md-3 d-flex justify-content-center flex-column">
+          <div className="text-truncate text-center text-md-left">{title}</div>
+
+          <div className="text-center text-md-left">
             {getTime(audio.currentTime)} / {getTime(duration)}
           </div>
         </div>
-        <div className="col-6 d-flex justify-content-center">
+        <div className="col-12 col-md-6 d-flex justify-content-center mt-2 mt-md-0">
           <SvgSkipPrevious24Px
             {...iconProps}
             onClick={() => traverse(Traverse.BACKWARD)}
@@ -311,8 +312,12 @@ export const GlobalPlayer = () => {
             {...iconProps}
             onClick={() => traverse(Traverse.FORWARD)}
           />
+
+          <div className="d-md-none">
+            <Volume />
+          </div>
         </div>
-        <div className="col-3">
+        <div className="d-none d-md-block col-md-3">
           <div className="d-flex justify-content-end">
             <Volume />
           </div>
