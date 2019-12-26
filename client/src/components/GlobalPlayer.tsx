@@ -100,7 +100,7 @@ export const GlobalPlayer = () => {
 
     const nextFile = queue[next];
 
-    const url = `${settings.baseUrl}api/audio/play/${nextFile.id}`;
+    const url = `${settings.REACT_APP_API_BASE_URL}api/audio/play/${nextFile.id}`;
 
     if (currentPosition !== next) {
       const newAudio = new Audio(url);
@@ -232,7 +232,7 @@ export const GlobalPlayer = () => {
       playing
     ) {
       fetch(
-        `${settings.baseUrl}api/audio/save/${fileId}/${user?.sub}/${currentTime}`
+        `${settings.REACT_APP_API_BASE_URL}api/audio/save/${fileId}/${user?.sub}/${currentTime}`
       );
       setLastUpdated(currentTime);
       console.log(`saving time ${currentTime}`);

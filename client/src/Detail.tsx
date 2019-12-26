@@ -23,7 +23,7 @@ const Detail: React.FC = () => {
   useEffect(() => {
     const fetchData = async () => {
       const resp = await fetch(
-        `${settings.baseUrl}api/audio/${id}/${user?.sub}`
+        `${settings.REACT_APP_API_BASE_URL}api/audio/${id}/${user?.sub}`
       );
       const data = await resp.json();
 

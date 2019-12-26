@@ -18,9 +18,13 @@ if (process.env.NODE_ENV !== 'production') {
   middleware.push(createLogger() as any);
 }
 
-export const settings = {
-  baseUrl: process.env.REACT_APP_API_BASE_URL || '',
-};
+interface WindowSettings {
+  REACT_APP_API_BASE_URL: string;
+  REACT_APP_AUTH0_DOMAIN: string;
+  REACT_APP_AUTH0_CLIENT_ID: string;
+}
+
+export const settings = (window as any) as WindowSettings;
 
 const composeEnhancers =
   (window as any).__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
