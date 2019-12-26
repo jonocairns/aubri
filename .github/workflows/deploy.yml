@@ -1,4 +1,4 @@
-name: CI/CD (client/server)
+name: Push to Dockerhub
 
 on:
   push:
