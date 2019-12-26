@@ -1,10 +1,13 @@
 name: CI (client/server)
 
-on: [push]
+on: 
+  push:
+    branches:
+    - master
+    - release/*
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
 
     strategy:
@@ -33,3 +36,20 @@ jobs:
         yarn build
       env:
         CI: true
+
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@master
+    - name: Publish to Registry
+      uses: elgohr/Publish-Docker-Github-Action@master
+      env:
+        REACT_APP_AUTH0_CLIENT_ID: ${{ secrets.AUTH0_CLIENT_ID }}
+        REACT_APP_AUTH0_DOMAIN: ${{ secrets.AUTH0_DOMAIN }}
+        REACT_APP_API_BASE_URL: /
+      with:
+        name: jonocairns/aubri
+        username: ${{ secrets.DOCKER_USERNAME }}
+        password: ${{ secrets.DOCKER_PASSWORD }}
+        dockerfile: docker/server.Dockerfile
+        buildargs: REACT_APP_AUTH0_CLIENT_ID,REACT_APP_AUTH0_DOMAIN,REACT_APP_API_BASE_URL
