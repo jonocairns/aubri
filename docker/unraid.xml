@@ -1,0 +1,43 @@
+ <?xml version="1.0" encoding="utf-8"?>
+ <Container version="2">
+ <Name>Aubri</Name>
+   <Overview>
+    Plex for audiobooks
+   </Overview>
+   <Registry>https://hub.docker.com/repository/docker/jonocairns/aubri</Registry>
+   <Repository>jonocairns/aubri</Repository>
+   <Privileged>false</Privileged>
+   <Support>https://github.com/jonocairns/aubri/issues</Support>
+   <Network Default="host">bridge</Network>
+   <WebUI>http://[IP]:[PORT:6969]</WebUI>
+   <Icon>https://images-na.ssl-images-amazon.com/images/I/51aPvOyiK-L._SY355_.png</Icon>
+
+   <Config 
+       Type="Path" 
+       Name="Config directory" 
+       Target="/usr/src/data" 
+       Default="/mnt/user/audiobooks" 
+       Mode="rw" 
+       Description="This is where your audiobooks are"
+       Required="true">/mnt/user/audiobooks</Config>
+
+     <Config 
+       Type="Variable" 
+       Name="PostgreSQL connection string" 
+       Target="DATABASE_URL" 
+       Default="postgres://user:pass@192.168.1.75/databasename" 
+       Description="The connection string to PostgreSQL" 
+       Mask="false" 
+       Display="advanced" 
+       Required="true">postgres://user:pass@192.168.1.75/databasename</Config>
+
+    <Config 
+       Type="Port" 
+       Name="PORT" 
+       Target="6969" 
+       Default="6969" 
+       Mode="tcp" 
+       Description="This is aubris port" 
+       Display="always" 
+       Required="true">6969</Config>
+ </Container>
