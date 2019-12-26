@@ -1,0 +1,35 @@
+# Use postgres/example user/password credentials
+version: '3.1'
+
+services:
+
+  db:
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: example
+      POSTGRES_USER: user
+      POSTGRES_DB: audi
+    ports:
+        - 5432:5432
+    volumes:
+      - "./init-user-db.sh:/docker-entrypoint-initdb.d/init-user-db.sh"
+
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8080:8080
+
+  api:
+    image: server
+    restart: always
+    volumes: 
+      - "C:\\DEV\\data:/usr/src/app/data"
+    ports:
+      - 6969:6969
+    depends_on:
+      - db
+    env_file:
+      - .env
+    command: ["./wait-for-pg.sh", "db:5432", "--", "node", "dist/server.js"]

@@ -1,3 +1,3 @@
 export const CONSTANTS = {
-  folderPath: 'data',
+  folderPath: process.env.DATA,
 };

@@ -18,6 +18,10 @@ if (process.env.NODE_ENV !== 'production') {
   middleware.push(createLogger() as any);
 }
 
+export const settings = {
+  baseUrl: process.env.REACT_APP_API_BASE_URL || '',
+};
+
 const composeEnhancers =
   (window as any).__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 

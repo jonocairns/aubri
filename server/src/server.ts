@@ -1,6 +1,8 @@
 import cors from 'cors';
 import dotenv from 'dotenv';
 import express from 'express';
+import fs from 'fs';
+import path from 'path';
 
 import {item, list} from './controllers/audio';
 import {play, save} from './controllers/play';
@@ -25,6 +27,13 @@ app.use(cors());
 app.listen(6969, () => {
   console.log('[NodeJS] Application Listening on Port 6969');
 });
+
+const staticFiles = path.join(__dirname, '../../client/build');
+
+if (fs.existsSync(staticFiles)) {
+  console.log(`found static files @ ${staticFiles}`);
+  app.use('/', express.static(staticFiles));
+}
 
 app.get('/api/audio/play/:id', play);
 

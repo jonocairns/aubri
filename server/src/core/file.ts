@@ -1,7 +1,7 @@
 import axios from 'axios';
 import cheerio from 'cheerio';
 import crypto from 'crypto';
-import ffmpeg, {FfprobeData} from 'fluent-ffmpeg';
+import {FfprobeData} from 'fluent-ffmpeg';
 import {readdirSync, statSync} from 'fs';
 import {basename, join, normalize} from 'path';
 import {promisify} from 'util';
@@ -9,6 +9,7 @@ import {promisify} from 'util';
 import {CONSTANTS} from '../constants';
 import {readDirAsync} from '../controllers/audio';
 import {buildInsertQuery, query, trans} from './data';
+import ffmpeg from './ffmpeg';
 import {Audiobook, validate} from './schema';
 
 const probeP = promisify(ffmpeg.ffprobe);
@@ -47,7 +48,7 @@ export const init = async () => {
 
   console.log(`found ${itemsNotInDb.length} items not in db...`);
 
-  console.log('fetching metadata');
+  console.log('fetching metadata if required...');
 
   const promises: Array<Promise<void>> = [];
 
@@ -83,7 +84,14 @@ export const init = async () => {
           name: 'year',
           target: '.releaseDateLabel span',
           multi: false,
-          translate: (item: string): string => new Date(item).toISOString(),
+          translate: (item: string): string => {
+            const parsedDate = Date.parse(item);
+
+            if (!isNaN(parsedDate)) {
+              return new Date(item).toISOString();
+            }
+            return new Date().toISOString();
+          },
         },
         {name: 'title', target: '.bc-list-item h3 a', multi: false},
         {name: 'subtitle', target: '.subtitle span', multi: false},
@@ -134,18 +142,19 @@ export const init = async () => {
         },
       ];
 
-      const img = $(items).find('.responsive-product-square img')[0].attribs[
+      const img = $(items).find('.responsive-product-square img')[0]?.attribs[
         'src'
       ];
       props.push({
         prop: 'image',
-        value: img,
+        value: img || '',
       });
 
-      const detailLink = $(items)
-        .find('.bc-list-item h3 a')[0]
-        .attribs['href'].split('?')
-        .shift();
+      const detailLink =
+        $(items)
+          .find('.bc-list-item h3 a')[0]
+          ?.attribs['href']?.split('?')
+          ?.shift() || '';
       const fullLink = `https://www.audible.com${detailLink}`;
 
       props.push({
@@ -284,4 +293,6 @@ export const init = async () => {
   });
 
   await Promise.all(promises);
+
+  console.log('init complete...');
 };

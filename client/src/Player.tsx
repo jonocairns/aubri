@@ -11,6 +11,7 @@ import {
 } from './constants/actionTypes';
 import {SvgPauseCircleOutline24Px} from './icons/PauseCircleOutline24Px';
 import {SvgPlayCircleOutline24Px} from './icons/PlayCircleOutline24Px';
+import {settings} from './index';
 import {State} from './State';
 
 interface PlayerProps {
@@ -28,7 +29,7 @@ const Player = (props: PlayerProps) => {
   ) as number;
 
   const play = async () => {
-    const url = `http://localhost:6969/api/audio/play/${props.fileId}`;
+    const url = `${settings.baseUrl}api/audio/play/${props.fileId}`;
 
     if (src !== url) {
       dispatch({

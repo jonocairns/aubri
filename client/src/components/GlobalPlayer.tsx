@@ -17,6 +17,7 @@ import {SvgPlayCircleOutline24Px} from '../icons/PlayCircleOutline24Px';
 import {SvgReplay3024Px} from '../icons/Replay3024Px';
 import {SvgSkipNext24Px} from '../icons/SkipNext24Px';
 import {SvgSkipPrevious24Px} from '../icons/SkipPrevious24Px';
+import {settings} from '../index';
 import {State} from '../State';
 import {Volume} from './Volume';
 
@@ -79,7 +80,10 @@ export const GlobalPlayer = () => {
       playing
     ) {
       audio.currentTime = 0;
-      dispatch({type: UPDATE_CURRENT_TIME, currentTime: audio.currentTime});
+      dispatch({
+        type: UPDATE_CURRENT_TIME,
+        payload: {time: audio.currentTime, id: fileId},
+      });
       return;
     }
 
@@ -96,7 +100,7 @@ export const GlobalPlayer = () => {
 
     const nextFile = queue[next];
 
-    const url = `http://localhost:6969/api/audio/play/${nextFile.id}`;
+    const url = `${settings.baseUrl}api/audio/play/${nextFile.id}`;
 
     if (currentPosition !== next) {
       const newAudio = new Audio(url);
@@ -110,7 +114,10 @@ export const GlobalPlayer = () => {
         title: nextFile.filename,
       });
       dispatch({type: UPDATE_DURATION, duration: nextFile.duration});
-      dispatch({type: UPDATE_CURRENT_TIME, currentTime: audio.currentTime});
+      dispatch({
+        type: UPDATE_CURRENT_TIME,
+        payload: {time: audio.currentTime, id: fileId},
+      });
 
       if (play) {
         dispatch({type: PLAY});
@@ -225,7 +232,7 @@ export const GlobalPlayer = () => {
       playing
     ) {
       fetch(
-        `http://localhost:6969/api/audio/save/${fileId}/${user?.sub}/${currentTime}`
+        `${settings.baseUrl}api/audio/save/${fileId}/${user?.sub}/${currentTime}`
       );
       setLastUpdated(currentTime);
       console.log(`saving time ${currentTime}`);

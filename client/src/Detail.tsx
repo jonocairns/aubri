@@ -8,6 +8,7 @@ import {HydrateTimeAction} from './actions/timeStateAction';
 import {useAuth0} from './Auth';
 import {Crumb} from './Breadcrumb';
 import {HYDRATE_SESSIONS} from './constants/actionTypes';
+import {settings} from './index';
 import {Placeholder} from './Placeholder';
 import Player from './Player';
 
@@ -22,7 +23,7 @@ const Detail: React.FC = () => {
   useEffect(() => {
     const fetchData = async () => {
       const resp = await fetch(
-        `http://localhost:6969/api/audio/${id}/${user?.sub}`
+        `${settings.baseUrl}api/audio/${id}/${user?.sub}`
       );
       const data = await resp.json();
 
