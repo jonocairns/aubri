@@ -2,6 +2,8 @@ FROM node:12-alpine
 
 WORKDIR /usr/src/app
 
+ENV REACT_APP_API_BASE_URL=/
+
 COPY server/package.json server/yarn.lock ./server/
 COPY client/package.json client/yarn.lock ./client/
 
