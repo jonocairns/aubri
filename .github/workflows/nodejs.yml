@@ -4,7 +4,7 @@ on:
   push:
     branches:
     - master
-    - release/*
+    - release/* 
 
 jobs:
   build:
@@ -36,6 +36,23 @@ jobs:
         yarn build
       env:
         CI: true
+
+    - name: get version
+      uses: pCYSl5EDgo/cat@master
+      id: version
+      with:
+        path: docker/version.txt
+
+    - run: echo $VERSION
+      env:
+        VERSION: ${{ steps.version.outputs.text }}
+  
+    - name: Release to GitHub
+      uses: opspresso/action-release@master
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        TAG_NAME: $VERSION
+
     - name: Publish to Registry
       uses: elgohr/Publish-Docker-Github-Action@master
       env:
