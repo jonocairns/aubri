@@ -51,7 +51,7 @@ jobs:
       uses: opspresso/action-release@master
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        TAG_NAME: $VERSION
+        TAG_NAME: ${{ steps.version.outputs.text }}
 
     - name: Publish to Registry
       uses: elgohr/Publish-Docker-Github-Action@master
