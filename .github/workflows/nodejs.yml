@@ -37,7 +37,7 @@ jobs:
       env:
         CI: true
 
-  build:
+  publish:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@master
