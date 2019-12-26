@@ -19,5 +19,5 @@ jobs:
         name: jonocairns/aubri
         username: ${{ secrets.DOCKER_USERNAME }}
         password: ${{ secrets.DOCKER_PASSWORD }}
-        dockerfile: docker/Dockerfile
+        dockerfile: docker/server.Dockerfile
         buildargs: REACT_APP_AUTH0_CLIENT_ID,REACT_APP_AUTH0_DOMAIN,REACT_APP_API_BASE_URL
