@@ -52,4 +52,3 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         TAG_NAME: ${{ steps.version.outputs.text }}
 
-  
