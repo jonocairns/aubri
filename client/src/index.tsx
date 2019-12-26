@@ -24,7 +24,7 @@ interface WindowSettings {
   REACT_APP_AUTH0_CLIENT_ID: string;
 }
 
-export const settings = (window as any) as WindowSettings;
+export const settings = (process.env as never) as WindowSettings;
 
 const composeEnhancers =
   (window as any).__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;

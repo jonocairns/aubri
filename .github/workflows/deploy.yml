@@ -14,8 +14,8 @@ jobs:
       - name: Publish to Registry (tag)
         uses: elgohr/Publish-Docker-Github-Action@master
         env:
-          REACT_APP_AUTH0_CLIENT_ID: ${{ secrets.AUTH0_CLIENT_ID }}
-          REACT_APP_AUTH0_DOMAIN: ${{ secrets.AUTH0_DOMAIN }}
+          REACT_APP_AUTH0_CLIENT_ID: ${{ secrets.REACT_APP_AUTH0_CLIENT_ID }}
+          REACT_APP_AUTH0_DOMAIN: ${{ secrets.REACT_APP_AUTH0_DOMAIN }}
           REACT_APP_API_BASE_URL: /
         with:
           name: jonocairns/aubri
@@ -24,12 +24,12 @@ jobs:
           dockerfile: docker/server.Dockerfile
           tag_names: true
           buildargs: REACT_APP_AUTH0_CLIENT_ID,REACT_APP_AUTH0_DOMAIN,REACT_APP_API_BASE_URL
-          
+
       - name: Publish to Registry (latest)
         uses: elgohr/Publish-Docker-Github-Action@master
         env:
-          REACT_APP_AUTH0_CLIENT_ID: ${{ secrets.AUTH0_CLIENT_ID }}
-          REACT_APP_AUTH0_DOMAIN: ${{ secrets.AUTH0_DOMAIN }}
+          REACT_APP_AUTH0_CLIENT_ID: ${{ secrets.REACT_APP_AUTH0_CLIENT_ID }}
+          REACT_APP_AUTH0_DOMAIN: ${{ secrets.REACT_APP_AUTH0_DOMAIN }}
           REACT_APP_API_BASE_URL: /
         with:
           name: jonocairns/aubri
