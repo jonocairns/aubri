@@ -1,4 +1,4 @@
-name: CI/CD (client/server)
+name: docker hub
 
 on: 
   push:
