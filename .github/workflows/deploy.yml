@@ -1,9 +1,9 @@
 name: Push to dockerhub
 
-on: 
-  push:
-    tags:
-    - '*'
+on:
+  push: 
+    branches: 
+      - refs/tags/*
 
 jobs:
   build:
