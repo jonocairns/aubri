@@ -51,6 +51,16 @@
        Display="advanced" 
        Required="true"></Config>
 
+                  <Config 
+       Type="Variable" 
+       Name="DATA" 
+       Target="DATA" 
+       Default="../../data" 
+       Description="data folder location" 
+       Mask="false" 
+       Display="advanced" 
+       Required="true"></Config>
+
     <Config 
        Type="Port" 
        Name="PORT" 
