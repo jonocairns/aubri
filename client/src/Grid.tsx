@@ -31,8 +31,8 @@ const Grid: React.FC = () => {
           <div
             onClick={() => handleNav(f.id)}
             key={f.id}
-            className="card m-2"
-            style={{width: '18em', cursor: 'pointer'}}
+            className="card m-4 bg-transparent text-white border-0"
+            style={{width: '16em', cursor: 'pointer'}}
           >
             <Img
               className="card-img-top"
@@ -42,9 +42,13 @@ const Grid: React.FC = () => {
             />
 
             {/* <img src={f.image} className="card-img-top" alt="..." /> */}
-            <div className="card-body">
-              <h5 className="card-title">{f.title}</h5>
-              <p className="card-text text-truncate">{f.subtitle}</p>
+            <div className="card-body px-0 pt-2 pb-0 mb-0">
+              <p className="card-title small text-uppercase font-weight-bold text-truncate pb-0 mb-0">
+                {f.title}
+              </p>
+              <p className="text-truncate py-0 my-0" style={{opacity: 0.6}}>
+                {f.author}
+              </p>
             </div>
           </div>
         ))}
