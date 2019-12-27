@@ -36,11 +36,11 @@ export interface Audiobook {
   folder: string;
   author: string;
   narrator: string;
-  runtime: string;
+  runtime: number;
   language: string;
-  stars: string;
-  ratings: string;
-  year: string;
+  stars: number;
+  ratings: number;
+  year: Date;
 }
 
 const session: Array<Schema> = [
