@@ -10,6 +10,7 @@ A place to store your audiobooks
 2. nodejs
 3. yarn
 4. Auth0 account (set client in `./client/.env`)
+5. install FFMPEG
 
 Getting started:
 

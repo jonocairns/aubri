@@ -2,6 +2,8 @@ FROM node:12-alpine
 
 WORKDIR /usr/src/app
 
+RUN apk add ffmpeg
+
 ARG REACT_APP_AUTH0_CLIENT_ID=setme
 ENV REACT_APP_AUTH0_CLIENT_ID=${REACT_APP_AUTH0_CLIENT_ID}
 
@@ -35,6 +37,7 @@ RUN yarn run build
 
 WORKDIR /usr/src/app/client
 RUN yarn run build
+RUN rm -rf node_modules
 
 WORKDIR /usr/src/app/server
 

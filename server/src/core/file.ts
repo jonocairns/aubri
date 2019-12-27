@@ -1,7 +1,7 @@
 import axios from 'axios';
 import cheerio from 'cheerio';
 import crypto from 'crypto';
-import {FfprobeData} from 'fluent-ffmpeg';
+import ffmpeg, {FfprobeData} from 'fluent-ffmpeg';
 import {readdirSync, statSync} from 'fs';
 import path, {basename, join, normalize} from 'path';
 import {promisify} from 'util';
@@ -9,7 +9,6 @@ import {promisify} from 'util';
 import {CONSTANTS} from '../constants';
 import {readDirAsync} from '../controllers/audio';
 import {buildInsertQuery, query, trans} from './data';
-import ffmpeg from './ffmpeg';
 import {Audiobook, validate} from './schema';
 
 const probeP = promisify(ffmpeg.ffprobe);
