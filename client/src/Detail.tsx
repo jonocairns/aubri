@@ -18,7 +18,8 @@ const Detail: React.FC = () => {
   const {user} = useAuth0();
   const [book, setBook] = useState<Audiobook | null>(null);
   const [loading, setLoading] = useState(true);
-  const [readMore, setReadMore] = useState(false);
+  console.log(book?.description?.length);
+
   const {id} = useParams();
 
   console.log(user);
@@ -62,14 +63,6 @@ const Detail: React.FC = () => {
     return out;
   };
 
-  const descriptionProps = {
-    style: {
-      maxHeight: readMore ? '999px' : '400px',
-      transition: 'all 0.25s ease-in-out',
-      overflow: 'hidden',
-    },
-  };
-
   return (
     <div className="container d-flex flex-wrap">
       <div className="col-12">
@@ -103,38 +96,13 @@ const Detail: React.FC = () => {
         </p>
         <p>Length: {length(book.runtime)}</p>
 
-        <div className="position-relative">
-          {!readMore && (
-            <div
-              style={{
-                backgroundImage:
-                  'linear-gradient(to bottom, transparent 65%, #282c34)',
-                position: 'absolute',
-                width: '100%',
-                height: '100%',
-                left: 0,
-                bottom: 0,
-              }}
-            ></div>
-          )}
-          <div
-            {...descriptionProps}
-            dangerouslySetInnerHTML={{__html: book.description}}
-          ></div>
-        </div>
-        <button
-          className="py-2 px-0 btn btn-link text-white"
-          style={{cursor: 'pointer'}}
-          onClick={() => setReadMore(!readMore)}
-        >
-          Read {readMore ? 'less' : 'more'}...
-        </button>
+        <div dangerouslySetInnerHTML={{__html: book.description}}></div>
 
         <div className="list-group mt-3">
           {(book as any).files.map((f: File) => (
             <Player
               key={f.id}
-              title={f.filename}
+              title={f.title || f.filename}
               fileId={f.id}
               duration={f.duration}
               queue={(book as any).files}
