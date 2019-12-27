@@ -21,7 +21,7 @@ const Grid: React.FC = () => {
   const handleNav = (id: string) => history.push(`/detail/${id}`);
 
   useEffect(() => {
-    fetchData(settings.REACT_APP_API_BASE_URL);
+    fetchData(settings.baseUrl);
   }, []);
 
   return (

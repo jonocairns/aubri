@@ -32,6 +32,26 @@
        Required="true">postgres://user:pass@192.168.1.75/databasename</Config>
 
     <Config 
+       Type="Variable" 
+       Name="Auth0 client ID" 
+       Target="REACT_APP_AUTH0_CLIENT_ID" 
+       Default="" 
+       Description="The auth0 client id" 
+       Mask="false" 
+       Display="advanced" 
+       Required="true"></Config>
+
+           <Config 
+       Type="Variable" 
+       Name="Auth0 domain" 
+       Target="REACT_APP_AUTH0_DOMAIN" 
+       Default="" 
+       Description="The auth0 domain address e.g. appname.au.auth0.com" 
+       Mask="false" 
+       Display="advanced" 
+       Required="true"></Config>
+
+    <Config 
        Type="Port" 
        Name="PORT" 
        Target="6969" 

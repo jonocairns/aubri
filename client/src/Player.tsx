@@ -29,7 +29,7 @@ const Player = (props: PlayerProps) => {
   ) as number;
 
   const play = async () => {
-    const url = `${settings.REACT_APP_API_BASE_URL}api/audio/play/${props.fileId}`;
+    const url = `${settings.baseUrl}api/audio/play/${props.fileId}`;
 
     if (src !== url) {
       dispatch({

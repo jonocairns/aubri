@@ -6,6 +6,7 @@ import path from 'path';
 
 import {item, list} from './controllers/audio';
 import {play, save} from './controllers/play';
+import {settings} from './controllers/settings';
 import {init} from './core/file';
 
 dotenv.config();
@@ -41,3 +42,5 @@ app.get('/api/audio/save/:id/:userId/:time', save);
 
 app.get('/api/audio', list);
 app.get('/api/audio/:id/:userId', item);
+
+app.get('/api/settings', settings);

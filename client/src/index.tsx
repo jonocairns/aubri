@@ -8,6 +8,7 @@ import {applyMiddleware, compose, createStore} from 'redux';
 import {createLogger} from 'redux-logger';
 import thunk from 'redux-thunk';
 
+import {Settings} from '../../server/src/controllers/settings';
 import App from './App';
 import {Auth0Provider} from './Auth';
 import {rootReducer} from './reducers/index';
@@ -18,13 +19,15 @@ if (process.env.NODE_ENV !== 'production') {
   middleware.push(createLogger() as any);
 }
 
-interface WindowSettings {
-  REACT_APP_API_BASE_URL: string;
-  REACT_APP_AUTH0_DOMAIN: string;
-  REACT_APP_AUTH0_CLIENT_ID: string;
+interface ClientSettings extends Settings {
+  baseUrl: string;
 }
 
-export const settings = (process.env as never) as WindowSettings;
+export let settings: ClientSettings = {
+  clientId: '',
+  domain: '',
+  baseUrl: process.env.REACT_APP_API_BASE_URL ?? '',
+};
 
 const composeEnhancers =
   (window as any).__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
@@ -44,20 +47,31 @@ const onRedirectCallback = (appState: any) => {
   );
 };
 
-console.log(process.env.REACT_APP_AUTH0_DOMAIN);
-ReactDOM.render(
-  <Auth0Provider
-    domain={process.env.REACT_APP_AUTH0_DOMAIN || ''}
-    client_id={process.env.REACT_APP_AUTH0_CLIENT_ID || ''}
-    redirect_uri={window.location.origin}
-    onRedirectCallback={onRedirectCallback}
-  >
-    <Provider store={store}>
-      <App />
-    </Provider>
-  </Auth0Provider>,
-  document.getElementById('root')
-);
+const fetchSettings = async () => {
+  const response = await fetch(`${settings.baseUrl}api/settings`);
+  return await response.json();
+};
+
+const renderApp = async () => {
+  const apiSettings = await fetchSettings();
+  settings = {...settings, ...apiSettings};
+
+  ReactDOM.render(
+    <Auth0Provider
+      domain={settings.domain}
+      client_id={settings.clientId}
+      redirect_uri={window.location.origin}
+      onRedirectCallback={onRedirectCallback}
+    >
+      <Provider store={store}>
+        <App />
+      </Provider>
+    </Auth0Provider>,
+    document.getElementById('root')
+  );
+};
+
+renderApp();
 
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.

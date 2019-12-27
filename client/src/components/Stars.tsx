@@ -15,18 +15,23 @@ const iconProps = {
 const getArray = (count: number) => Array.from(Array(count).keys());
 
 export const Stars: React.FC<Props> = ({stars}) => {
-  const wholeStars = getArray(Math.floor(stars)).map(() => (
-    <SvgStar24Px {...iconProps} />
+  const wholeStars = getArray(Math.floor(stars)).map((s, i) => (
+    <SvgStar24Px {...iconProps} key={`star-full-${i}`} />
   ));
-  const emptyStars = getArray(Math.floor(5 - stars)).map(() => (
-    <SvgStarBorder24Px {...iconProps} />
+  const emptyStars = getArray(Math.floor(5 - stars)).map((s, i) => (
+    <SvgStarBorder24Px {...iconProps} key={`star-empty-${i}`} />
   ));
   const hasPartial = stars % 1 > 0;
   const halfStars = getArray(stars % 1 >= 0.5 ? 1 : 0).map(() => (
-    <SvgStarHalf24Px {...iconProps} />
+    <SvgStarHalf24Px {...iconProps} key={`star-half-1`} />
   ));
   if (hasPartial && halfStars.length === 0) {
-    emptyStars.push(<SvgStarBorder24Px {...iconProps} />);
+    emptyStars.push(
+      <SvgStarBorder24Px
+        {...iconProps}
+        key={`star-empty-${Math.floor(5 - stars) + 1}`}
+      />
+    );
   }
 
   return (
