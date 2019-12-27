@@ -1,4 +1,5 @@
 import React from 'react';
+
 import {SvgStar24Px} from '../icons/Star24Px';
 import {SvgStarBorder24Px} from '../icons/StarBorder24Px';
 import {SvgStarHalf24Px} from '../icons/StarHalf24Px';
