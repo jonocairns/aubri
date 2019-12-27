@@ -41,7 +41,6 @@ const Grid: React.FC = () => {
               loader={<Placeholder />}
             />
 
-            {/* <img src={f.image} className="card-img-top" alt="..." /> */}
             <div className="card-body px-0 pt-2 pb-0 mb-0">
               <p className="card-title small text-uppercase font-weight-bold text-truncate pb-0 mb-0">
                 {f.title}

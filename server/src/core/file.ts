@@ -74,7 +74,7 @@ export const init = async () => {
         return '';
       }
     };
-    const findMany = (node: Cheerio, target: string) => $(node).find(target);
+    const findMany = (node: Cheerio, target: string) => $(node[0]).find(target);
 
     const searchSchema = [
       {
