@@ -37,7 +37,7 @@ export const Speed: React.FC = () => {
           className="position-absolute bg-secondary"
           style={{left: 0, top: -120}}
         >
-          <div className="list-group d-flex flex-column-reverse align-items-center justify-content-center">
+          <div className="list-group d-flex flex-column align-items-center justify-content-center">
             <SvgAdd24Px
               {...iconProps}
               onClick={() => updateSpeed(speed + 0.1)}
