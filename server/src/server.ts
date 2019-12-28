@@ -44,3 +44,7 @@ app.get('/api/audio', list);
 app.get('/api/audio/:id/:userId', item);
 
 app.get('/api/settings', settings);
+
+app.get('*', (req, res) => {
+  res.sendFile(`${staticFiles}/index.html`);
+});
