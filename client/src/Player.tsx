@@ -21,6 +21,8 @@ interface PlayerProps {
   queue: Array<File>;
 }
 
+export const fillTheme = '#1FFFC5';
+
 const Player = (props: PlayerProps) => {
   const dispatch = useDispatch();
   const {fileId, src, playing} = useSelector((state: State) => state.player);
@@ -63,7 +65,7 @@ const Player = (props: PlayerProps) => {
         style={{height: '100%', position: 'absolute', left: 0, top: 0}}
       >
         <div
-          className="bg-warning"
+          className="theme-color-bg"
           style={{width: `${percent}%`, height: '100%', opacity: 0.1}}
         ></div>
       </div>
@@ -74,7 +76,11 @@ const Player = (props: PlayerProps) => {
         onClick={play}
       >
         {props.fileId === fileId && playing ? (
-          <SvgPauseCircleOutline24Px fill="white" height="28px" width="28px" />
+          <SvgPauseCircleOutline24Px
+            fill={fillTheme}
+            height="28px"
+            width="28px"
+          />
         ) : (
           <SvgPlayCircleOutline24Px fill="white" height="28px" width="28px" />
         )}

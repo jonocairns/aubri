@@ -19,6 +19,7 @@ import {SvgSkipNext24Px} from '../icons/SkipNext24Px';
 import {SvgSkipPrevious24Px} from '../icons/SkipPrevious24Px';
 import {settings} from '../index';
 import {State} from '../State';
+import {Speed} from './Speed';
 import {Volume} from './Volume';
 
 const audioEvents = [
@@ -56,6 +57,7 @@ export const GlobalPlayer = () => {
     title,
     volume,
     queue,
+    speed,
   } = useSelector((state: State) => state.player);
   const times = useSelector((state: State) => state.time);
   const [lastUpdated, setLastUpdated] = useState(0);
@@ -248,6 +250,10 @@ export const GlobalPlayer = () => {
     }
   };
 
+  React.useEffect(() => {
+    audio.playbackRate = speed;
+  }, [speed, audio]);
+
   const onClickPercent = (e: React.MouseEvent) => {
     const percentClick = (e.clientX / window.innerWidth) * 100;
     const seek = duration * (percentClick / 100);
@@ -287,7 +293,7 @@ export const GlobalPlayer = () => {
           style={{height: '3px', cursor: 'pointer'}}
         >
           <div
-            className="bg-warning"
+            className="theme-color-bg"
             style={{width: `${percent}%`, height: '3px', opacity: 0.5}}
           ></div>
         </div>
@@ -301,6 +307,7 @@ export const GlobalPlayer = () => {
           </div>
         </div>
         <div className="col-12 col-md-6 d-flex justify-content-center mt-2 mt-md-0">
+          <Speed />
           <SvgSkipPrevious24Px
             {...iconProps}
             onClick={() => traverse(Traverse.BACKWARD)}
@@ -321,7 +328,7 @@ export const GlobalPlayer = () => {
             onClick={() => traverse(Traverse.FORWARD)}
           />
 
-          <div className="d-md-none">
+          <div className="d-md-none align-self-end">
             <Volume />
           </div>
         </div>

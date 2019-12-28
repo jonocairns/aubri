@@ -14,3 +14,4 @@ export const UPDATE_SRC = 'UPDATE_SRC';
 export const UPDATE_VOLUME = 'UPDATE_VOLUME';
 
 export const UPDATE_QUEUE = 'UPDATE_QUEUE';
+export const UPDATE_SPEED = 'UPDATE_SPEED';

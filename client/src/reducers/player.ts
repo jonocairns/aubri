@@ -6,6 +6,7 @@ import {
   UPDATE_CURRENT_TIME,
   UPDATE_DURATION,
   UPDATE_QUEUE,
+  UPDATE_SPEED,
   UPDATE_SRC,
   UPDATE_VOLUME,
 } from '../constants/actionTypes';
@@ -21,6 +22,7 @@ const initialState: PlayerState = {
   title: '',
   volume: 1,
   queue: [],
+  speed: 1,
 };
 
 export const playerReducer = (
@@ -62,6 +64,11 @@ export const playerReducer = (
       return {
         ...state,
         queue: action.queue,
+      };
+    case UPDATE_SPEED:
+      return {
+        ...state,
+        speed: action.speed,
       };
     case UPDATE_SRC:
       return {

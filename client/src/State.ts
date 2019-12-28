@@ -9,6 +9,7 @@ export interface PlayerState {
   src: string;
   title: string;
   volume: number;
+  speed: number;
   queue: Array<File>;
 }
 

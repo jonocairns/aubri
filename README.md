@@ -1,8 +1,15 @@
 ## Aubri
 
+![](https://github.com/jonocairns/aubri/workflows/CI/CD%20(client/server)/badge.svg)
+
 A place to store your audiobooks
 
 ## Development
+
+[![GitHub issues](https://img.shields.io/github/issues/jonocairns/aubri.svg?maxAge=60&style=plastic&logo=github)](https://github.com/jonocairns/aubri/issues)
+[![GitHub pull requests](https://img.shields.io/github/issues-pr/jonocairns/aubri.svg?maxAge=60&style=plastic&logo=github)](https://github.com/jonocairns/aubri/pulls)
+
+[![Docker release](https://img.shields.io/badge/jonocairns-aubri:latest-blue.svg?colorB=1488C6&maxAge=60&style=plastic&logo=docker)](https://hub.docker.com/r/jonocairns/aubri)
 
 ### Requirements
 
@@ -21,3 +28,4 @@ Getting started:
 5. Copy the `.env.example` to `.env` and set all the variables (in both client and server)
 6. Add audio books to `./server/data`
 7. Run `yarn start` in both client and server
+

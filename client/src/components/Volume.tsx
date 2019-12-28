@@ -2,7 +2,6 @@ import React, {useEffect, useRef, useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 
 import {UPDATE_VOLUME} from '../constants/actionTypes';
-import {SvgVolumeMute24Px} from '../icons/VolumeMute24Px';
 import {SvgVolumeUp24Px} from '../icons/VolumeUp24Px';
 import {State} from '../State';
 import {iconProps} from './GlobalPlayer';
@@ -14,8 +13,6 @@ export const Volume: React.FC = () => {
   const dispatch = useDispatch();
   const ref = useRef<HTMLDivElement | null>(null);
   const volume = useSelector((state: State) => state.player.volume);
-  // move this to localstorage?
-  const [localVol, setLocalVol] = useState(1);
   const toggle = () => setIsOpen(!isOpen);
 
   const setVolume = (e: React.MouseEvent) => {
@@ -28,20 +25,11 @@ export const Volume: React.FC = () => {
 
       if (percent - 1 > -1 && percent + 1 > 1) {
         dispatch({type: UPDATE_VOLUME, volume: percent});
-        setLocalVol(percent);
       }
     }
     console.log(
       `getBoundingClientRect for volume element not found, ignoring volume set.`
     );
-  };
-
-  const explicitSetVolume = (vol: number) => {
-    if (volume === 0) {
-      dispatch({type: UPDATE_VOLUME, volume: localVol});
-    } else {
-      dispatch({type: UPDATE_VOLUME, volume: vol});
-    }
   };
 
   const handleClickOutside = (event: MouseEvent) => {
@@ -75,15 +63,11 @@ export const Volume: React.FC = () => {
             }}
           >
             <div
-              className="w-100 bg-warning"
+              className="w-100 theme-color-bg"
               style={{height: `${volume * 100}%`}}
             ></div>
           </div>
         )}
-        <SvgVolumeMute24Px
-          {...iconProps}
-          onClick={() => explicitSetVolume(0)}
-        />
       </div>
       <SvgVolumeUp24Px {...iconProps} onClick={toggle} />
     </div>

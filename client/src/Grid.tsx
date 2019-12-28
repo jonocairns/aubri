@@ -25,14 +25,14 @@ const Grid: React.FC = () => {
   }, []);
 
   return (
-    <div className="d-flex flex-wrap mt-5 justify-content-center">
+    <div className="d-flex flex-wrap mt-3 justify-content-center">
       {!loading &&
         list.map(f => (
           <div
             onClick={() => handleNav(f.id)}
             key={f.id}
             className="card m-4 bg-transparent text-white border-0"
-            style={{width: '16em', cursor: 'pointer'}}
+            style={{maxWidth: '20em', cursor: 'pointer'}}
           >
             <Img
               className="card-img-top"

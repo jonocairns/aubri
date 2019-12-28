@@ -1,5 +1,15 @@
 // Override default variables before the import
 $body-bg: #282c34;
 
+$aubri-theme: #1FFFC5;
+
+.theme-color-bg {
+    background-color: $aubri-theme;
+}
+
+.theme-color {
+    color: $aubri-theme !important;
+}
+
 // Import Bootstrap and its default variables
 @import '~bootstrap/scss/bootstrap.scss';

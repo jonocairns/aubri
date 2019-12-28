@@ -10,7 +10,7 @@ import {
 } from 'reactstrap';
 
 import {useAuth0} from '../Auth';
-import headphones from '../images/headphones.png';
+import headphones from '../images/logo.png';
 
 export const Nav = () => {
   const [collapsed, setCollapsed] = useState(true);
@@ -22,7 +22,7 @@ export const Nav = () => {
     <div>
       <Navbar color="faded" dark className="bg-dark px-4" expand="md">
         <NavbarBrand href="/" className="mr-auto">
-          <img src={headphones} alt="logo" width="40px" />
+          <img src={headphones} alt="logo" height="25px" />
         </NavbarBrand>
         <NavbarToggler onClick={toggleNavbar} className="mr-2" />
         <Collapse isOpen={!collapsed} navbar>

@@ -5,6 +5,7 @@ import {
   UPDATE_BUFFERED,
   UPDATE_DURATION,
   UPDATE_QUEUE,
+  UPDATE_SPEED,
   UPDATE_SRC,
   UPDATE_VOLUME,
 } from '../constants/actionTypes';
@@ -34,6 +35,11 @@ export interface UpdateQueueAction {
   queue: Array<File>;
 }
 
+export interface UpdateSpeedAction {
+  type: typeof UPDATE_SPEED;
+  speed: number;
+}
+
 export interface UpdateSrcAction {
   type: typeof UPDATE_SRC;
   src: string;
@@ -48,4 +54,5 @@ export type PlayerActionTypes =
   | UpdateDuration
   | UpdateSrcAction
   | UpdateVolumeAction
-  | UpdateQueueAction;
+  | UpdateQueueAction
+  | UpdateSpeedAction;
