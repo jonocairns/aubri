@@ -13,3 +13,4 @@ export const SvgStarHalf24Px = (props: React.SVGProps<SVGSVGElement>) => (
     />
   </svg>
 );
+export default SvgStarHalf24Px;

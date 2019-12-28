@@ -8,6 +8,8 @@ module.exports = {
     return typeScriptTpl.ast`
     import * as React from 'react';
     export const ${componentName} = (props: React.SVGProps<SVGSVGElement>) => ${jsx};
+
+    export default ${componentName};
   `
   },
 }

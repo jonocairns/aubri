@@ -13,3 +13,4 @@ export const SvgReplay3024Px = (props: React.SVGProps<SVGSVGElement>) => (
     />
   </svg>
 );
+export default SvgReplay3024Px;

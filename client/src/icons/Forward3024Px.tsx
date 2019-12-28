@@ -13,3 +13,4 @@ export const SvgForward3024Px = (props: React.SVGProps<SVGSVGElement>) => (
     />
   </svg>
 );
+export default SvgForward3024Px;

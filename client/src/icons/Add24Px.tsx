@@ -5,3 +5,4 @@ export const SvgAdd24Px = (props: React.SVGProps<SVGSVGElement>) => (
     <path d="M0 0h24v24H0z" fill="none" />
   </svg>
 );
+export default SvgAdd24Px;
