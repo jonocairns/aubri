@@ -1,8 +1,10 @@
 name: PR CI
+
 on: 
-  push:
+  pull_request:
     branches:
-    - pull_request
+      - master
+
 jobs:
   build_pr:
     runs-on: ubuntu-latest
