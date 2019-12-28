@@ -7,7 +7,7 @@ import path, {basename, join, normalize} from 'path';
 import {promisify} from 'util';
 
 import {CONSTANTS} from '../constants';
-import {readDirAsync} from '../controllers/audio';
+import {readDirAsync, strongHash} from '../controllers/audio';
 import {buildInsertQuery, query, trans} from './data';
 import {Audiobook, validate} from './schema';
 
@@ -18,17 +18,17 @@ const dirs = (path: string) =>
 
 const fileSync = () => {
   // check if there are any new files...
-  const path = join(__dirname, `../../${CONSTANTS.folderPath}`);
+  const path = CONSTANTS.folderPath;
   console.log(`checking path: ${path}`);
   const files = dirs(path);
   console.log(`found ${files.length} files...`);
   return files.map(f => normalize(`${path}/${f}`));
 };
 
-export const weakHash = (s: string) =>
+const weakHash = (input: string) =>
   crypto
     .createHash('md5')
-    .update(s)
+    .update(input)
     .digest('hex');
 
 export const init = async () => {
@@ -209,7 +209,7 @@ export const init = async () => {
     const filePromises = files.map(async file => {
       const meta = (await probeP(file)) as FfprobeData;
 
-      const h = weakHash(`${item.hash}${file}`);
+      const h = strongHash(`${item.hash}${file}`);
 
       const tags = meta.format.tags as {title?: string};
 

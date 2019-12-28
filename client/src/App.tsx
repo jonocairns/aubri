@@ -20,7 +20,7 @@ const App: React.FC = () => {
   }
 
   if (!isAuthenticated) {
-    loginWithRedirect({});
+    loginWithRedirect();
     return null;
   }
 

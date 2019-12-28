@@ -18,6 +18,7 @@ const Detail: React.FC = () => {
   const {user} = useAuth0();
   const [book, setBook] = useState<Audiobook | null>(null);
   const [loading, setLoading] = useState(true);
+  const {fetchAuthenticated} = useAuth0();
   console.log(book?.description?.length);
 
   const {id} = useParams();
@@ -25,10 +26,9 @@ const Detail: React.FC = () => {
   console.log(user);
   useEffect(() => {
     const fetchData = async () => {
-      const resp = await fetch(
+      const data = await fetchAuthenticated(
         `${settings.baseUrl}api/audio/${id}/${user?.sub}`
       );
-      const data = await resp.json();
 
       dispatch({
         type: HYDRATE_SESSIONS,
@@ -40,7 +40,7 @@ const Detail: React.FC = () => {
     };
 
     fetchData();
-  }, [id, dispatch, user]);
+  }, [id, dispatch, user, fetchAuthenticated]);
 
   if (loading || !book) {
     return null;

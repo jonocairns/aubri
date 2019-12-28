@@ -4,6 +4,7 @@ import express from 'express';
 import fs from 'fs';
 import path from 'path';
 
+import {checkJwt} from './auth';
 import {item, list} from './controllers/audio';
 import {play, save} from './controllers/play';
 import {settings} from './controllers/settings';
@@ -36,13 +37,12 @@ if (fs.existsSync(staticFiles)) {
   app.use('/', express.static(staticFiles));
 }
 
+// no auth here but uses the fileID (sha512 hash + salt) that is ONLY provided to the client on authenticated routes.
 app.get('/api/audio/play/:id', play);
 
-app.get('/api/audio/save/:id/:userId/:time', save);
-
-app.get('/api/audio', list);
-app.get('/api/audio/:id/:userId', item);
-
+app.get('/api/audio/save/:id/:userId/:time', checkJwt, save);
+app.get('/api/audio', checkJwt, list);
+app.get('/api/audio/:id/:userId', checkJwt, item);
 app.get('/api/settings', settings);
 
 app.get('*', (req, res) => {

@@ -48,10 +48,15 @@ interface ParamsDictionary {
   [id: string]: string;
 }
 
+const salt = crypto
+  .createHash('md5')
+  .update(process.env.REACT_APP_AUTH0_DOMAIN)
+  .digest('hex');
+
 export const strongHash = (input: string) =>
   crypto
     .createHash('sha512')
-    .update('testing')
+    .update(input + salt)
     .digest('hex');
 
 export const item = async (req: Request<ParamsDictionary>, res: Response) => {

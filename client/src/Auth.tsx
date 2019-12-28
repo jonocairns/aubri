@@ -6,7 +6,7 @@ export interface Auth0RedirectState {
   targetUrl?: string;
 }
 
-export interface Auth0User extends Omit<IdToken, '__raw'> {
+export interface Auth0User extends IdToken {
   sub: string;
 }
 
@@ -22,6 +22,7 @@ interface Auth0Context {
   getTokenSilently(o?: GetTokenSilentlyOptions): Promise<string | undefined>;
   getTokenWithPopup(o?: GetTokenWithPopupOptions): Promise<string | undefined>;
   logout(o?: LogoutOptions): void;
+  fetchAuthenticated(url: string): Promise<any>;
 }
 interface Auth0ProviderOptions {
   children: React.ReactElement;
@@ -50,6 +51,7 @@ export const Auth0Provider = ({
         let appState: RedirectLoginResult = {};
         try {
           ({appState} = await auth0FromHook.handleRedirectCallback());
+          console.log(appState);
         } finally {
           onRedirectCallback(appState);
         }
@@ -59,7 +61,6 @@ export const Auth0Provider = ({
 
       if (authed) {
         const userProfile = await auth0FromHook.getUser();
-
         setIsAuthenticated(true);
         setUser(userProfile);
       }
@@ -114,6 +115,16 @@ export const Auth0Provider = ({
   const getTokenWithPopup = (options?: GetTokenWithPopupOptions) =>
     auth0Client!.getTokenWithPopup(options);
 
+  const fetchAuthenticated = async (url: string) => {
+    const token = await getTokenSilently();
+    const resp = await fetch(url, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return await resp.json();
+  };
+
   return (
     <Auth0Context.Provider
       value={{
@@ -128,6 +139,7 @@ export const Auth0Provider = ({
         handleRedirectCallback,
         getIdTokenClaims,
         getTokenWithPopup,
+        fetchAuthenticated,
       }}
     >
       {children}

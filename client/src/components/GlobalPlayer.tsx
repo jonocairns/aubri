@@ -62,6 +62,7 @@ export const GlobalPlayer = () => {
   const times = useSelector((state: State) => state.time);
   const [lastUpdated, setLastUpdated] = useState(0);
   const [audio, setAudio] = useState(new Audio());
+  const {fetchAuthenticated} = useAuth0();
 
   const updateProgress = () => {
     const range = audio.buffered;
@@ -233,7 +234,7 @@ export const GlobalPlayer = () => {
       currentTime !== 0 &&
       playing
     ) {
-      fetch(
+      fetchAuthenticated(
         `${settings.baseUrl}api/audio/save/${fileId}/${user?.sub}/${currentTime}`
       );
       setLastUpdated(currentTime);

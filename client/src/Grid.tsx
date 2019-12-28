@@ -3,6 +3,7 @@ import Img from 'react-image';
 import {useHistory} from 'react-router-dom';
 
 import {Audiobook} from '../../server/src/core/schema';
+import {useAuth0} from './Auth';
 import {settings} from './index';
 import {Placeholder} from './Placeholder';
 
@@ -10,10 +11,10 @@ const Grid: React.FC = () => {
   const [list, setList] = useState(new Array<Audiobook>());
   const [loading, setLoading] = useState(true);
   const history = useHistory();
+  const {fetchAuthenticated} = useAuth0();
 
   const fetchData = async (baseUrl: string) => {
-    const resp = await fetch(`${baseUrl}api/audio`);
-    const data = await resp.json();
+    const data = await fetchAuthenticated(`${baseUrl}api/audio`);
     setList(data);
     setLoading(false);
   };
@@ -22,6 +23,7 @@ const Grid: React.FC = () => {
 
   useEffect(() => {
     fetchData(settings.baseUrl);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (

@@ -26,6 +26,7 @@ interface ClientSettings extends Settings {
 export let settings: ClientSettings = {
   clientId: '',
   domain: '',
+  audience: '',
   baseUrl: process.env.REACT_APP_API_BASE_URL ?? '',
 };
 
@@ -62,6 +63,7 @@ const renderApp = async () => {
       client_id={settings.clientId}
       redirect_uri={window.location.origin}
       onRedirectCallback={onRedirectCallback}
+      audience={settings.audience}
     >
       <Provider store={store}>
         <App />
