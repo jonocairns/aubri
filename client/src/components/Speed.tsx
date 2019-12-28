@@ -2,11 +2,11 @@ import React, {useEffect, useRef, useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 
 import {UPDATE_SPEED} from '../constants/actionTypes';
-import {State} from '../State';
-import {iconProps} from './GlobalPlayer';
-import {SvgSpeed24Px} from '../icons/Speed24Px';
 import {SvgAdd24Px} from '../icons/Add24Px';
 import {SvgRemove24Px} from '../icons/Remove24Px';
+import {SvgSpeed24Px} from '../icons/Speed24Px';
+import {State} from '../State';
+import {iconProps} from './GlobalPlayer';
 
 export const Speed: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
