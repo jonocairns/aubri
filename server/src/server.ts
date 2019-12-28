@@ -40,9 +40,9 @@ if (fs.existsSync(staticFiles)) {
 // no auth here but uses the fileID (sha512 hash + salt) that is ONLY provided to the client on authenticated routes.
 app.get('/api/audio/play/:id', play);
 
-app.get('/api/audio/save/:id/:userId/:time', checkJwt, save);
+app.get('/api/audio/save/:id/:time', checkJwt, save);
 app.get('/api/audio', checkJwt, list);
-app.get('/api/audio/:id/:userId', checkJwt, item);
+app.get('/api/audio/:id', checkJwt, item);
 app.get('/api/settings', settings);
 
 app.get('*', (req, res) => {

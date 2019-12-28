@@ -27,7 +27,7 @@ const Detail: React.FC = () => {
   useEffect(() => {
     const fetchData = async () => {
       const data = await fetchAuthenticated(
-        `${settings.baseUrl}api/audio/${id}/${user?.sub}`
+        `${settings.baseUrl}api/audio/${id}`
       );
 
       dispatch({

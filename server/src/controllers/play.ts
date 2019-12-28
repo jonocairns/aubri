@@ -1,5 +1,6 @@
 import {Request, Response} from 'express';
 import fs from 'fs';
+import decode from 'jwt-decode';
 
 import {query, trans} from '../core/data';
 import {File} from '../core/schema';
@@ -68,9 +69,25 @@ export const play = async (req: Request<ParamsDictionary>, res: Response) => {
   }
 };
 
+export interface User {
+  sub: string;
+  iss: string;
+  aud: Array<string>;
+  iat: number;
+  exp: number;
+  azp: string;
+  scope: string;
+}
+
+export const getUser = (req: Request) => {
+  const authorization = req.headers.authorization.split(' ')[1];
+  return decode(authorization) as User;
+};
+
 export const save = async (req: Request<ParamsDictionary>, res: Response) => {
   const id = req.params.id;
-  const userId = req.params.userId;
+
+  const userId = getUser(req).sub;
   const time = req.params.time;
 
   const hashedUserId = strongHash(userId);

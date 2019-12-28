@@ -6,6 +6,7 @@ import {promisify} from 'util';
 
 import {query} from '../core/data';
 import {Audiobook} from '../core/schema';
+import {getUser} from './play';
 
 const readdirP = promisify(readdir);
 const statP = promisify(stat);
@@ -61,7 +62,7 @@ export const strongHash = (input: string) =>
 
 export const item = async (req: Request<ParamsDictionary>, res: Response) => {
   const id = req.params.id;
-  const userId = req.params.userId;
+  const userId = getUser(req).sub;
   const hashedUserId = strongHash(userId);
 
   const d = await query('SELECT * FROM audiobook WHERE id = $1', [id]);

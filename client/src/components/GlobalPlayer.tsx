@@ -46,7 +46,6 @@ export enum Traverse {
 }
 
 export const GlobalPlayer = () => {
-  const {user} = useAuth0();
   const dispatch = useDispatch();
   const {
     fileId,
@@ -235,7 +234,7 @@ export const GlobalPlayer = () => {
       playing
     ) {
       fetchAuthenticated(
-        `${settings.baseUrl}api/audio/save/${fileId}/${user?.sub}/${currentTime}`
+        `${settings.baseUrl}api/audio/save/${fileId}/${currentTime}`
       );
       setLastUpdated(currentTime);
       console.log(`saving time ${currentTime}`);
