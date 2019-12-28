@@ -34,7 +34,7 @@ export const Speed: React.FC = () => {
     <div ref={ref} className="d-flex flex-row position-relative">
       {isOpen && (
         <div
-          className="position-absolute bg-secondary"
+          className="position-absolute bg-secondary py-2"
           style={{left: 0, top: -120}}
         >
           <div className="list-group d-flex flex-column align-items-center justify-content-center">

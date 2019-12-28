@@ -307,7 +307,9 @@ export const GlobalPlayer = () => {
           </div>
         </div>
         <div className="col-12 col-md-6 d-flex justify-content-center mt-2 mt-md-0">
-          <Speed />
+          <div className="d-md-none">
+            <Speed />
+          </div>
           <SvgSkipPrevious24Px
             {...iconProps}
             onClick={() => traverse(Traverse.BACKWARD)}
@@ -334,6 +336,7 @@ export const GlobalPlayer = () => {
         </div>
         <div className="d-none d-md-block col-md-3">
           <div className="d-flex justify-content-end">
+            <Speed />
             <Volume />
           </div>
         </div>
