@@ -4,7 +4,13 @@ update_configs:
   - package_manager: "javascript"
     directory: "/client"
     update_schedule: "daily"
+    automerged_updates:
+      - match:
+          update_type: "semver:patch"
 
   - package_manager: "javascript"
     directory: "/server"
     update_schedule: "daily"
+    automerged_updates:
+      - match:
+          update_type: "semver:patch"
