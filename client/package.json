@@ -42,7 +42,7 @@
     "redux": "^4.0.4",
     "redux-logger": "^3.0.6",
     "redux-thunk": "^2.3.0",
-    "typescript": "~3.7.2",
+    "typescript": "~3.7.4",
     "use-debounce": "^3.3.0"
   },
   "scripts": {
