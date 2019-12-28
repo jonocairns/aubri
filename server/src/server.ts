@@ -48,3 +48,11 @@ app.get('/api/settings', settings);
 app.get('*', (req, res) => {
   res.sendFile(`${staticFiles}/index.html`);
 });
+
+app.use((err: Error, req: any, res: any, next: any) => {
+  if (err.name === 'UnauthorizedError') {
+    res.status(401).send('Unauthorized');
+  } else {
+    res.status(500).send('Something broke!');
+  }
+});
