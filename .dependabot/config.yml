@@ -1,0 +1,10 @@
+version: 1
+
+update_configs:
+  - package_manager: "javascript"
+    directory: "/client"
+    update_schedule: "daily"
+
+  - package_manager: "javascript"
+    directory: "/server"
+    update_schedule: "daily"
