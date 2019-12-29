@@ -26,7 +26,17 @@ export const readDirAsync = async (
 };
 
 export const list = async (req: Request, res: Response) => {
-  const audiobookResult = await query('SELECT * FROM audiobook', []);
+  const take = 10;
+  const currentCount = req.params.count ?? take;
+
+  const total = await query('SELECT COUNT(*) FROM audiobook', []);
+
+  const hasMore = Number(total.rows[0].count) > currentCount;
+
+  const audiobookResult = await query(
+    'SELECT * FROM audiobook OFFSET $1 ROWS FETCH NEXT $2 ROWS ONLY',
+    [currentCount.toString(), take.toString()]
+  );
 
   const books = audiobookResult.rows as Array<Audiobook>;
 
@@ -42,7 +52,10 @@ export const list = async (req: Request, res: Response) => {
     files: allFiles.filter(af => b.id === af.bookid),
   }));
 
-  res.json(returnSet);
+  res.json({
+    items: returnSet,
+    hasMore,
+  });
 };
 
 interface ParamsDictionary {
