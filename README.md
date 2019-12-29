@@ -1,5 +1,6 @@
 ## Aubri
 
+![](https://img.shields.io/endpoint.svg?url=https%3A%2F%2Fshieldsio-patreon.herokuapp.com%2Fjonosma%2Fpledges&style=plastic)
 ![](https://github.com/jonocairns/aubri/workflows/CI/CD%20(client/server)/badge.svg)
 
 A place to store your audiobooks
