@@ -41,7 +41,7 @@ if (fs.existsSync(staticFiles)) {
 app.get('/api/audio/play/:id', play);
 
 app.get('/api/audio/save/:id/:time', checkJwt, save);
-app.get('/api/audio', checkJwt, list);
+app.get('/api/audio/grid/:count', checkJwt, list);
 app.get('/api/audio/:id', checkJwt, item);
 app.get('/api/settings', settings);
 

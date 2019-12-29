@@ -6,18 +6,30 @@ import {Audiobook} from '../../server/src/core/schema';
 import {useAuth0} from './Auth';
 import {settings} from './index';
 import {Placeholder} from './Placeholder';
+import {useInfiniteScroll} from './useInfinitScroll';
 
 const Grid: React.FC = () => {
   const [list, setList] = useState(new Array<Audiobook>());
   const [loading, setLoading] = useState(true);
+  const [hasMore, setHasMore] = useState(false);
   const history = useHistory();
   const {fetchAuthenticated} = useAuth0();
 
   const fetchData = async (baseUrl: string) => {
-    const data = await fetchAuthenticated(`${baseUrl}api/audio`);
-    setList(data);
+    const data = await fetchAuthenticated(
+      `${baseUrl}api/audio/grid/${list.length}`
+    );
+    setList(([] as Array<Audiobook>).concat(list, data.items));
+    setHasMore(data.hasMore);
     setLoading(false);
   };
+
+  const infiniteRef = useInfiniteScroll({
+    loading,
+    hasNextPage: hasMore,
+    onLoadMore: async () => await fetchData(settings.baseUrl),
+    scrollContainer: 'window',
+  });
 
   const handleNav = (id: string) => history.push(`/detail/${id}`);
 
@@ -27,7 +39,10 @@ const Grid: React.FC = () => {
   }, []);
 
   return (
-    <div className="d-flex flex-wrap mt-3 justify-content-center">
+    <div
+      ref={infiniteRef as any}
+      className="d-flex flex-wrap mt-3 justify-content-center"
+    >
       {!loading &&
         list.map(f => (
           <div
