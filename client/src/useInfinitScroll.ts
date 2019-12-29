@@ -80,8 +80,6 @@ export const useInfiniteScroll = ({
         const bottomOffset = getBottomOffset();
         const validOffset = bottomOffset < threshold;
 
-        console.log(`bottomoffset ${bottomOffset} and threashold ${threshold}`);
-
         if (validOffset) {
           onLoadMore();
         }
