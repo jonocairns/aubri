@@ -9,12 +9,14 @@ import {item, list} from './controllers/audio';
 import {play, save} from './controllers/play';
 import {settings} from './controllers/settings';
 import {init} from './core/file';
+import {watcher} from './core/watcher';
 
 dotenv.config();
 
 (async function main() {
   try {
     await init();
+    watcher();
   } catch (err) {
     console.log(err);
   }
