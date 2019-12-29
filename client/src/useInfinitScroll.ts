@@ -23,15 +23,15 @@ export const useInfiniteScroll = ({
     }
   }, [loading]);
 
-  function getParentSizes() {
+  const getParentSizes = () => {
     const parentNode = (ref?.current as any).parentNode;
     const parentRect = parentNode.getBoundingClientRect();
     const {top, bottom, left, right} = parentRect;
 
     return {top, bottom, left, right};
-  }
+  };
 
-  function getBottomOffset() {
+  const getBottomOffset = () => {
     const rect = (ref?.current as any).getBoundingClientRect();
 
     const bottom = rect.bottom;
@@ -44,9 +44,9 @@ export const useInfiniteScroll = ({
     }
 
     return bottomOffset;
-  }
+  };
 
-  function isParentInView() {
+  const isParentInView = () => {
     const parent = ref.current ? (ref?.current as any).parentNode : null;
 
     if (parent) {
@@ -63,9 +63,9 @@ export const useInfiniteScroll = ({
     }
 
     return true;
-  }
+  };
 
-  function listenBottomOffset() {
+  const listenBottomOffset = () => {
     if (listen && !loading && hasNextPage) {
       if (ref.current) {
         if (scrollContainer === PARENT) {
@@ -87,7 +87,7 @@ export const useInfiniteScroll = ({
         }
       }
     }
-  }
+  };
 
   useInterval(
     () => {
