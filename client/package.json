@@ -7,7 +7,7 @@
     "@svgr/cli": "^5.0.1",
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.3.2",
-    "@testing-library/user-event": "^7.1.2",
+    "@testing-library/user-event": "^8.0.2",
     "@types/classnames": "^2.2.9",
     "@types/jest": "^24.0.25",
     "@types/lodash": "^4.14.149",
