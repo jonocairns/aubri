@@ -6,6 +6,8 @@
 
 A place to store your audiobooks
 
+[Installing on unraid](https://github.com/jonocairns/aubri/wiki/Installing-on-Unraid)
+
 ## Development
 
 [![GitHub issues](https://img.shields.io/github/issues/jonocairns/aubri.svg?maxAge=60&style=plastic&logo=github)](https://github.com/jonocairns/aubri/issues)
@@ -30,4 +32,5 @@ Getting started:
 5. Copy the `.env.example` to `.env` and set all the variables (in both client and server)
 6. Add audio books to `./server/data`
 7. Run `yarn start` in both client and server
+
 
