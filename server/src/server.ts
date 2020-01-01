@@ -6,7 +6,7 @@ import path from 'path';
 
 import {checkJwt} from './auth';
 import {item, list} from './controllers/audio';
-import {play, save} from './controllers/play';
+import {download, play, save} from './controllers/play';
 import {settings} from './controllers/settings';
 import {init} from './core/file';
 
@@ -39,6 +39,7 @@ if (fs.existsSync(staticFiles)) {
 
 // no auth here but uses the fileID (sha512 hash + salt) that is ONLY provided to the client on authenticated routes.
 app.get('/api/audio/play/:id', play);
+app.get('/api/audio/download/:id', download);
 
 app.get('/api/audio/save/:id/:time', checkJwt, save);
 app.get('/api/audio/grid/:count', checkJwt, list);

@@ -30,6 +30,7 @@
     "eslint-plugin-react": "^7.17.0",
     "eslint-plugin-react-hooks": "^2.3.0",
     "eslint-plugin-simple-import-sort": "^5.0.0",
+    "idb": "^4.0.5",
     "lodash": "^4.17.15",
     "node-sass": "^4.13.0",
     "prettier": "^1.19.1",

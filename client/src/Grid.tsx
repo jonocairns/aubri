@@ -49,7 +49,7 @@ const Grid: React.FC = () => {
             onClick={() => handleNav(f.id)}
             key={f.id}
             className="card m-4 bg-transparent text-white border-0"
-            style={{maxWidth: '20em', cursor: 'pointer'}}
+            style={{width: '20em', cursor: 'pointer'}}
           >
             <Img
               className="card-img-top"

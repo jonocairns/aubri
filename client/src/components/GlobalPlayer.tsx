@@ -11,6 +11,7 @@ import {
   UPDATE_DURATION,
   UPDATE_SRC,
 } from '../constants/actionTypes';
+import {get} from '../db';
 import {SvgForward3024Px} from '../icons/Forward3024Px';
 import {SvgPauseCircleOutline24Px} from '../icons/PauseCircleOutline24Px';
 import {SvgPlayCircleOutline24Px} from '../icons/PlayCircleOutline24Px';
@@ -73,7 +74,7 @@ export const GlobalPlayer = () => {
     }
   };
 
-  const traverse = (direction: Traverse, play?: boolean) => {
+  const traverse = async (direction: Traverse, play?: boolean) => {
     console.log('traversing');
 
     if (
@@ -102,7 +103,9 @@ export const GlobalPlayer = () => {
 
     const nextFile = queue[next];
 
-    const url = `${settings.baseUrl}api/audio/play/${nextFile.id}`;
+    const url =
+      (await get(nextFile.id)) ??
+      `${settings.baseUrl}api/audio/play/${nextFile.id}`;
 
     if (currentPosition !== next) {
       const newAudio = new Audio(url);
