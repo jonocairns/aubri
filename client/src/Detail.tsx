@@ -155,7 +155,7 @@ const Detail: React.FC = () => {
         />
       </div>
       <div className="col-12 col-md-8 text-light">
-        <div className="d-flex justify-content-between">
+        <div className="d-flex justify-content-between py-3">
           <h3>{book.title}</h3>
           <div>
             {hasLocalFiles && (
@@ -174,7 +174,7 @@ const Detail: React.FC = () => {
           </div>
         </div>
 
-        <p>{book.subtitle}</p>
+        {book.subtitle && <p>{book.subtitle}</p>}
 
         <p className="my-0">Written by: {book.author}</p>
         <p className="my-0">Narrated by: {book.narrator}</p>
