@@ -16,7 +16,7 @@
     "jwks-rsa": "^1.6.0",
     "jwt-decode": "^2.2.0",
     "lodash": "^4.17.15",
-    "pg": "^7.16.0"
+    "pg": "^7.17.0"
   },
   "devDependencies": {
     "@types/cheerio": "^0.22.15",
