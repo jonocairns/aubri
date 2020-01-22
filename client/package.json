@@ -19,7 +19,7 @@
     "@types/reactstrap": "^8.4.0",
     "@types/redux-logger": "^3.0.7",
     "@typescript-eslint/eslint-plugin": "^2.17.0",
-    "@typescript-eslint/parser": "^2.16.0",
+    "@typescript-eslint/parser": "^2.17.0",
     "bootstrap": "^4.4.1",
     "classnames": "^2.2.6",
     "eslint": "^6.8.0",
