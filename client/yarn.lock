@@ -1239,15 +1239,15 @@
     "@svgr/babel-plugin-transform-react-native-svg" "^5.0.1"
     "@svgr/babel-plugin-transform-svg-component" "^5.0.1"
 
-"@svgr/cli@^5.0.1":
-  version "5.0.1"
-  resolved "https://registry.yarnpkg.com/@svgr/cli/-/cli-5.0.1.tgz#8029b6ad2caaeca71175d30ac93688e411f7bb68"
-  integrity sha512-Bbp6IdOQEz3Ocvw47iqPNsbRlIQzWfzuxiDvOk/YgtD30i3F45gPy2CGIw2MkCGasb/l1d7fqthywfPSpF14kg==
+"@svgr/cli@^5.1.0":
+  version "5.1.0"
+  resolved "https://registry.yarnpkg.com/@svgr/cli/-/cli-5.1.0.tgz#0658745a9d30b5f200349106bb29987f7b05db00"
+  integrity sha512-mdC+MK3LS3txNU7+iZz0+zVabcCgVzvnSqCzWzSuWX7f5cayHZsrJhQgavKqAuLRA3Jp9tZ4oF6b7Os7CVAk8w==
   dependencies:
     "@svgr/core" "^5.0.1"
     "@svgr/plugin-jsx" "^5.0.1"
     "@svgr/plugin-prettier" "^5.0.1"
-    "@svgr/plugin-svgo" "^5.0.1"
+    "@svgr/plugin-svgo" "^5.1.0"
     camelcase "^5.3.1"
     chalk "^3.0.0"
     commander "^4.0.1"
@@ -1324,10 +1324,10 @@
     merge-deep "^3.0.2"
     svgo "^1.2.2"
 
-"@svgr/plugin-svgo@^5.0.1":
-  version "5.0.1"
-  resolved "https://registry.yarnpkg.com/@svgr/plugin-svgo/-/plugin-svgo-5.0.1.tgz#37cd74b7c337efbed9e29ee8b36944b4469189b6"
-  integrity sha512-h/V30j1swWANLV1mB0w+1YYZ0U0CnWm721xyUKVHJrvMe4wl5XronZdvVAD2hhQf9+JgaQARrRJ0Vg1Dxi+SFg==
+"@svgr/plugin-svgo@^5.1.0":
+  version "5.1.0"
+  resolved "https://registry.yarnpkg.com/@svgr/plugin-svgo/-/plugin-svgo-5.1.0.tgz#6939223f90581cd503b42893e795d659dbd7f7c4"
+  integrity sha512-yj7e6F6nlMZyKe/uezrwS8ZJ6a/NRbQkuJV5yNdnottd9FiWQKG4mkLmb3YHas3rzfv5WBJHf1NU2p58/v01MA==
   dependencies:
     cosmiconfig "^6.0.0"
     merge-deep "^3.0.2"
