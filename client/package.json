@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@auth0/auth0-spa-js": "^1.6.2",
+    "@auth0/auth0-spa-js": "^1.6.3",
     "@svgr/cli": "^5.1.0",
     "@testing-library/jest-dom": "^5.0.2",
     "@testing-library/react": "^9.3.2",
