@@ -8,6 +8,8 @@ A place to store your audiobooks
 
 [Installing on unraid](https://github.com/jonocairns/aubri/wiki/Installing-on-Unraid)
 
+![](https://i.imgur.com/vgbhUMM.png)
+
 ## Development
 
 [![GitHub issues](https://img.shields.io/github/issues/jonocairns/aubri.svg?maxAge=60&style=plastic&logo=github)](https://github.com/jonocairns/aubri/issues)
