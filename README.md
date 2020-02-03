@@ -12,6 +12,8 @@ A place to store your audiobooks
 
 ![](https://i.imgur.com/ZXi0e9d.png)
 
+![](https://i.imgur.com/8Y5hJOE.png)
+
 ## Development
 
 [![GitHub issues](https://img.shields.io/github/issues/jonocairns/aubri.svg?maxAge=60&style=plastic&logo=github)](https://github.com/jonocairns/aubri/issues)
