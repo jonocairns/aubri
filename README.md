@@ -10,7 +10,7 @@ A place to store your audiobooks
 
 ![](https://i.imgur.com/vgbhUMM.png)
 
-![](https://i.imgur.com/ZXi0e9d.png)
+![](https://i.imgur.com/jH0EKYL.png)
 
 ![](https://i.imgur.com/8Y5hJOE.png)
 
