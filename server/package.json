@@ -13,7 +13,7 @@
     "express-jwt": "^5.3.1",
     "express-jwt-authz": "^2.3.1",
     "fluent-ffmpeg": "^2.1.2",
-    "jwks-rsa": "^1.6.2",
+    "jwks-rsa": "^1.7.0",
     "jwt-decode": "^2.2.0",
     "lodash": "^4.17.15",
     "pg": "^7.18.2"
