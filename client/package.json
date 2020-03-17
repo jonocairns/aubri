@@ -28,7 +28,7 @@
     "eslint-plugin-jest": "^23.8.2",
     "eslint-plugin-prettier": "^3.1.2",
     "eslint-plugin-react": "^7.19.0",
-    "eslint-plugin-react-hooks": "^2.4.0",
+    "eslint-plugin-react-hooks": "^2.5.0",
     "eslint-plugin-simple-import-sort": "^5.0.1",
     "idb": "^5.0.1",
     "lodash": "^4.17.15",
