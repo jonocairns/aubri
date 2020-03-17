@@ -12,17 +12,6 @@ export const watcher = () => {
   let hasStarted = false;
 
   watcher
-    .on('add', async path => {
-      if (hasStarted) {
-        // console.log('File', path, 'has been added');
-      }
-    })
-    .on('change', async path => {
-      // console.log('File', path, 'has been changed');
-    })
-    .on('unlink', path => {
-      // console.log('File', path, 'has been removed');
-    })
     .on('addDir', async path => {
       if (hasStarted) {
         console.log(`Directory ${path} has been added`);
