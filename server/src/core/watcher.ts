@@ -1,6 +1,7 @@
 import chokidar from 'chokidar';
 
 import {CONSTANTS} from '../constants';
+import {init} from './file';
 
 export const watcher = () => {
   const watcher = chokidar.watch(CONSTANTS.folderPath, {
@@ -11,23 +12,28 @@ export const watcher = () => {
   let hasStarted = false;
 
   watcher
-    .on('add', path => {
+    .on('add', async path => {
       if (hasStarted) {
-        console.log('File', path, 'has been added');
+        // console.log('File', path, 'has been added');
       }
     })
-    .on('change', path => {
-      console.log('File', path, 'has been changed');
+    .on('change', async path => {
+      // console.log('File', path, 'has been changed');
     })
     .on('unlink', path => {
-      console.log('File', path, 'has been removed');
+      // console.log('File', path, 'has been removed');
     })
-    .on('addDir', path => {
+    .on('addDir', async path => {
       if (hasStarted) {
         console.log(`Directory ${path} has been added`);
+
+        await init();
       }
     })
-    .on('unlinkDir', path => console.log(`Directory ${path} has been removed`))
+    .on('unlinkDir', async path => {
+      await init();
+      console.log(`Directory ${path} has been removed`);
+    })
     .on('error', error => console.log(`Watcher error: ${error}`))
     .on('ready', () => {
       hasStarted = true;
