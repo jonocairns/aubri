@@ -10,6 +10,7 @@ import {CONSTANTS} from '../constants';
 import {readDirAsync, strongHash} from '../controllers/audio';
 import {buildInsertQuery, query, trans} from './data';
 import {Audiobook, validate} from './schema';
+import {searchSchema} from './searchSchema';
 
 const probeP = promisify(ffmpeg.ffprobe);
 
@@ -45,6 +46,29 @@ export const init = async () => {
     i => !(dbItems.rows as Array<Audiobook>).map(r => r.id).includes(i.hash)
   );
 
+  const itemsNotInFolder = (dbItems.rows as Array<Audiobook>)
+    .map(r => r.id)
+    .filter(f => !hashes.map(h => h.hash).includes(f));
+
+  console.log(
+    `found ${itemsNotInFolder.length} items that need to be removed as they don't exist in the folder anymore`
+  );
+
+  const promises = [];
+  itemsNotInFolder.forEach(f => {
+    const promise = trans(async c => {
+      const file = c.query('SELECT * FROM audiobook where id = $1', [f]);
+
+      const result = (await file).rows[0];
+      console.log(`deleting ${result.title}`);
+      c.query('DELETE FROM session WHERE fileid = $1', [result.id]);
+      c.query('DELETE FROM audiobook WHERE id = $1', [f]);
+      c.query('DELETE FROM file WHERE bookid = $1', [f]);
+    });
+
+    promises.push(promise);
+  });
+
   console.log(`found ${itemsNotInDb.length} items not in db...`);
 
   console.log('fetching metadata if required...');
@@ -74,58 +98,6 @@ export const init = async () => {
       }
     };
     const findMany = (node: Cheerio, target: string) => $(node[0]).find(target);
-
-    const searchSchema = [
-      {
-        name: 'year',
-        target: '.releaseDateLabel span',
-        multi: false,
-        translate: (item: string): string => {
-          const parsedDate = Date.parse(item);
-
-          if (!isNaN(parsedDate)) {
-            return new Date(item).toISOString();
-          }
-          return new Date().toISOString();
-        },
-      },
-      {name: 'title', target: '.bc-list-item h3 a', multi: false},
-      {name: 'subtitle', target: '.subtitle span', multi: false},
-      {name: 'author', target: '.authorLabel span a', multi: true},
-      {name: 'narrator', target: '.narratorLabel span a', multi: false},
-      {
-        name: 'runtime',
-        target: '.runtimeLabel span',
-        multi: false,
-        translate: (searchItem: string): number =>
-          searchItem
-            .split(' ')
-            .filter(r => !isNaN(Number(r)))
-            .map(a => Number(a))
-            .map((a, i) => (i === 0 ? a * 60 : a))
-            .reduce((a, b) => a + b, 0) || 0,
-      },
-      {name: 'language', target: '.languageLabel span', multi: false},
-      {
-        name: 'stars',
-        target: '.ratingsLabel .bc-pub-offscreen',
-        multi: false,
-        translate: (item: string): number =>
-          Number(item.split(' ').shift()) || 0,
-      },
-      {
-        name: 'ratings',
-        target: '.ratingsLabel .bc-color-secondary',
-        multi: false,
-        translate: (item: string): number =>
-          Number(
-            item
-              .replace(/,/g, '')
-              .split(' ')
-              .shift()
-          ) || 0,
-      },
-    ];
 
     const props: Array<{prop: string; value: string}> = [
       {
