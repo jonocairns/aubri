@@ -3,8 +3,8 @@ import ContentLoader from 'react-content-loader';
 
 export const Placeholder = () => (
   <ContentLoader
-    height={286}
-    width={286}
+    height={320}
+    width={320}
     speed={2}
     primaryColor="#a2a9b0"
     secondaryColor="#c5cacf"

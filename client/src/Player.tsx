@@ -15,6 +15,7 @@ import {settings} from './index';
 import {State} from './State';
 
 interface PlayerProps {
+  localUrl: string | undefined;
   fileId: string;
   title: string;
   duration: number;
@@ -26,12 +27,20 @@ export const fillTheme = '#1FFFC5';
 const Player = (props: PlayerProps) => {
   const dispatch = useDispatch();
   const {fileId, src, playing} = useSelector((state: State) => state.player);
+
   const time = useSelector(
     (state: State) => state.time[props.fileId] || 0
   ) as number;
 
   const play = async () => {
-    const url = `${settings.baseUrl}api/audio/play/${props.fileId}`;
+    let url = props.localUrl;
+    if (!url) {
+      console.log('could not find local... streaming audio');
+
+      url = `${settings.baseUrl}api/audio/play/${props.fileId}`;
+    } else {
+      console.log('no need to stream, playing from local...');
+    }
 
     if (src !== url) {
       dispatch({
@@ -70,21 +79,19 @@ const Player = (props: PlayerProps) => {
         ></div>
       </div>
 
-      <span
-        className="text-white"
-        style={{cursor: 'pointer', zIndex: 1}}
-        onClick={play}
-      >
-        {props.fileId === fileId && playing ? (
-          <SvgPauseCircleOutline24Px
-            fill={fillTheme}
-            height="28px"
-            width="28px"
-          />
-        ) : (
-          <SvgPlayCircleOutline24Px fill="white" height="28px" width="28px" />
-        )}
-      </span>
+      <div style={{zIndex: 1}}>
+        <span className="text-white" style={{cursor: 'pointer'}} onClick={play}>
+          {props.fileId === fileId && playing ? (
+            <SvgPauseCircleOutline24Px
+              fill={fillTheme}
+              height="28px"
+              width="28px"
+            />
+          ) : (
+            <SvgPlayCircleOutline24Px fill="white" height="28px" width="28px" />
+          )}
+        </span>
+      </div>
     </div>
   );
 };

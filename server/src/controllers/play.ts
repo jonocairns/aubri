@@ -69,6 +69,22 @@ export const play = async (req: Request<ParamsDictionary>, res: Response) => {
   }
 };
 
+export const download = async (
+  req: Request<ParamsDictionary>,
+  res: Response
+) => {
+  try {
+    const id = req.params.id;
+    const results = await query('SELECT * FROM file WHERE id = $1', [id]);
+
+    const book = (results.rows[0] as File).location;
+
+    res.download(book);
+  } catch (e) {
+    console.log(e);
+  }
+};
+
 export interface User {
   sub: string;
   iss: string;
@@ -114,5 +130,5 @@ export const save = async (req: Request<ParamsDictionary>, res: Response) => {
     );
   }
   console.log(`saved ${id}`);
-  res.sendStatus(200);
+  res.status(200).json({});
 };
