@@ -238,7 +238,6 @@ export const detailPage = `
 		<div class="bc-section bc-spacing-medium" style="">
 			<h2 class="bc-heading bc-color-base bc-spacing-small bc-size-medium bc-text-bold">Publisher's Summary</h2>
 			<div class="bc-box bc-box-padding-none bc-spacing-small">
-				<span class="bc-text bc-color-secondary"></span>
 				<p><span class="bc-text bc-color-secondary">2015 Audie Award WINNER, Science Fiction<br>
 				2015 Audie Award Finalist, Solo Narration: Male<br>
 				2014 Voice Arts Award Finalist, Science Fiction&nbsp;</span></p>

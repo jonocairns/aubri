@@ -1,4 +1,7 @@
 export {default as Add24Px} from './Add24Px';
+export {default as CloudDone24Px} from './CloudDone24Px';
+export {default as CloudDownload24Px} from './CloudDownload24Px';
+export {default as Delete24Px} from './Delete24Px';
 export {default as Forward1024Px} from './Forward1024Px';
 export {default as Forward3024Px} from './Forward3024Px';
 export {default as PauseCircleOutline24Px} from './PauseCircleOutline24Px';

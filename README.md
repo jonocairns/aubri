@@ -1,8 +1,18 @@
-## Aubri
+![Imgur](https://i.imgur.com/377ZQbs.png)
+
+![](https://img.shields.io/endpoint.svg?url=https%3A%2F%2Fshieldsio-patreon.herokuapp.com%2Fjonosma%2Fpledges&style=plastic)
 
 ![](https://github.com/jonocairns/aubri/workflows/CI/CD%20(client/server)/badge.svg)
 
 A place to store your audiobooks
+
+[Installing on unraid](https://github.com/jonocairns/aubri/wiki/Installing-on-Unraid)
+
+![](https://i.imgur.com/vgbhUMM.png)
+
+![](https://i.imgur.com/jH0EKYL.png)
+
+![](https://i.imgur.com/8Y5hJOE.png)
 
 ## Development
 
@@ -28,4 +38,5 @@ Getting started:
 5. Copy the `.env.example` to `.env` and set all the variables (in both client and server)
 6. Add audio books to `./server/data`
 7. Run `yarn start` in both client and server
+
 

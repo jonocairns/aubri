@@ -1,5 +1,6 @@
 import cheerio from 'cheerio';
 
+import {Audiobook} from './schema';
 import {
   ratingsStringToNumber,
   runtimeStringToNumber,
@@ -7,19 +8,16 @@ import {
   stringToUtc,
 } from './scraperUtils';
 
-export const scraper = async (searchHtml: string) => {
+export const scraper = async (
+  id: string,
+  searchHtml: string,
+  folder: string,
+  description: string,
+  link: string
+): Promise<Audiobook> => {
   const searchPage = cheerio.load(searchHtml);
   const firstItem = searchPage('.productListItem')[0];
   const root = searchPage(firstItem);
-
-  const detailLink =
-    root
-      .find('.bc-list-item h3 a')
-      .toArray()
-      .pop()
-      ?.attribs['href']?.split('?')
-      ?.shift() || '';
-  const fullLink = `https://www.audible.com${detailLink}`;
 
   const getString = (selector: string) => {
     return root
@@ -35,7 +33,7 @@ export const scraper = async (searchHtml: string) => {
 
   const title = getString('.bc-list-item h3 a');
   const subtitle = getString('.subtitle span');
-  const year = stringToUtc(getString('.releaseDateLabel span'));
+  const year = new Date(stringToUtc(getString('.releaseDateLabel span')));
   const narrator = getString('.narratorLabel span a');
   const author = getString('.authorLabel span a');
   const runtime = runtimeStringToNumber(getString('.runtimeLabel span'));
@@ -52,6 +50,7 @@ export const scraper = async (searchHtml: string) => {
   const image = getImage();
 
   return {
+    id,
     title,
     subtitle,
     year,
@@ -62,14 +61,34 @@ export const scraper = async (searchHtml: string) => {
     stars,
     ratings,
     image,
-    fullLink,
+    folder,
+    description,
+    link,
+    lastUpdatedUtc: new Date(),
+    dateCreatedUtc: new Date(),
   };
+};
+
+export const getDetailLink = async (searchHtml: string) => {
+  const searchPage = cheerio.load(searchHtml);
+  const firstItem = searchPage('.productListItem')[0];
+  const root = searchPage(firstItem);
+  const detailLink =
+    root
+      .find('.bc-list-item h3 a')
+      .toArray()
+      .pop()
+      ?.attribs['href']?.split('?')
+      ?.shift() || '';
+  return `https://www.audible.com${detailLink}`;
 };
 
 export const getDetail = (detailHtml: string) => {
   const detailPage = cheerio.load(detailHtml);
 
-  const firstItem = detailPage('.productPublisherSummary')[0];
-
-  return detailPage(firstItem).html();
+  return (
+    detailPage('.productPublisherSummary')
+      .find('.bc-text')
+      .html() || ''
+  );
 };

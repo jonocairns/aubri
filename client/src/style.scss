@@ -11,5 +11,9 @@ $aubri-theme: #1FFFC5;
     color: $aubri-theme !important;
 }
 
+.theme-transition {
+    transition: fill .4s ease;
+}
+
 // Import Bootstrap and its default variables
 @import '~bootstrap/scss/bootstrap.scss';

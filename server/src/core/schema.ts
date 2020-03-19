@@ -38,9 +38,12 @@ export interface Audiobook {
   narrator: string;
   runtime: number;
   language: string;
+  link: string;
   stars: number;
   ratings: number;
   year: Date;
+  lastUpdatedUtc: Date;
+  dateCreatedUtc: Date;
 }
 
 const session: Array<Schema> = [
