@@ -1,9 +1,4 @@
-FROM postgres:12-alpine
-# FROM node:12-alpine
-
-COPY ./init-user-db.sh ./docker-entrypoint-initdb.d
-
-RUN apk add --update nodejs npm
+FROM node:12-alpine
 
 WORKDIR /usr/src/app
 
