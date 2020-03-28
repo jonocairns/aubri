@@ -51,7 +51,8 @@ jobs:
       id: create_release
       uses: actions/create-release@latest
       env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        # https://github.community/t5/GitHub-Actions/Github-actions-workflow-not-triggering-with-tag-push/td-p/39685
+        GITHUB_TOKEN: ${{ secrets.GITHUB_PAT }}
       with:
         tag_name: ${{ steps.version.outputs.text }}
         release_name: ${{ steps.version.outputs.text }}
