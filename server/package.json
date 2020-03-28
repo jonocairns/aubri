@@ -4,6 +4,8 @@
   "main": "index.js",
   "license": "MIT",
   "dependencies": {
+    "@ffmpeg-installer/ffmpeg": "^1.0.20",
+    "@ffprobe-installer/ffprobe": "^1.0.12",
     "@types/chokidar": "^2.1.3",
     "@types/jwt-decode": "^2.2.1",
     "axios": "^0.19.2",
