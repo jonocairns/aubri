@@ -43,4 +43,4 @@ WORKDIR /usr/src/app/server
 
 EXPOSE 6969
 
-CMD [ "node", "dist/server.js" ]
+CMD [ "node", "dist/src/server.js" ]
