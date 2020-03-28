@@ -32,11 +32,13 @@ app.listen(6969, () => {
   console.log('[NodeJS] Application Listening on Port 6969');
 });
 
-const staticFiles = path.join(__dirname, '../../client/build');
+const staticFiles = path.join(__dirname, '../../../client/build');
 
 if (fs.existsSync(staticFiles)) {
   console.log(`found static files @ ${staticFiles}`);
   app.use('/', express.static(staticFiles));
+} else {
+  console.log('could not find static files.');
 }
 
 // no auth here but uses the fileID (sha512 hash + salt) that is ONLY provided to the client on authenticated routes.
@@ -53,6 +55,8 @@ app.get('*', (req, res) => {
 });
 
 app.use((err: Error, req: any, res: any, next: any) => {
+  console.log(err.name);
+  console.log(err.message);
   if (err.name === 'UnauthorizedError') {
     res.status(401).send('Unauthorized');
   } else {
