@@ -26,7 +26,7 @@ interface ClientSettings extends Settings {
 export let settings: ClientSettings = {
   clientId: '',
   domain: '',
-  audience: 'http://localhost:6969',
+  audience: `http://localhost:6969`,
   baseUrl: process.env.REACT_APP_API_BASE_URL ?? '',
 };
 
