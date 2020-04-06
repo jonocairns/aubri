@@ -33,7 +33,7 @@
     "idb": "^5.0.1",
     "lodash": "^4.17.15",
     "node-sass": "^4.13.1",
-    "prettier": "^1.19.1",
+    "prettier": "^2.0.4",
     "react": "^16.12.0",
     "react-content-loader": "^4.3.4",
     "react-dom": "^16.13.0",
