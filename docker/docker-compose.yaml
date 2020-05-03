@@ -15,11 +15,15 @@ services:
     volumes:
       - "./init-user-db.sh:/docker-entrypoint-initdb.d/init-user-db.sh"
 
-  adminer:
-    image: adminer
-    restart: always
-    ports:
-      - 8080:8080
+  pgadmin:
+      container_name: pgadmin_container
+      image: dpage/pgadmin4
+      environment:
+        PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL:-admin@admin.com}
+        PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD:-admin}
+      ports:
+        - "${PGADMIN_PORT:-5050}:80"
+      restart: unless-stopped
 
   # api:
   #   image: server
