@@ -58,3 +58,4 @@ jobs:
         release_name: ${{ steps.version.outputs.text }}
         draft: false
         prerelease: false
+        body: ''
