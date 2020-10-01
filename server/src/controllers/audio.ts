@@ -28,13 +28,18 @@ export const readDirAsync = async (
 export const list = async (req: Request, res: Response) => {
   const take = 10;
   const currentCount = req.params.count ?? take;
+  const searchQuery = req.params.query
+    ? ` WHERE lower(title) similar to '%(${req.params.query})%'`
+    : '';
 
-  const total = await query('SELECT COUNT(*) FROM audiobook', []);
+  console.log(searchQuery);
+
+  const total = await query(`SELECT COUNT(*) FROM audiobook${searchQuery}`, []);
 
   const hasMore = Number(total.rows[0].count) > currentCount;
 
   const audiobookResult = await query(
-    'SELECT * FROM audiobook OFFSET $1 ROWS FETCH NEXT $2 ROWS ONLY',
+    `SELECT * FROM audiobook${searchQuery} OFFSET $1 ROWS FETCH NEXT $2 ROWS ONLY`,
     [currentCount.toString(), take.toString()]
   );
 
