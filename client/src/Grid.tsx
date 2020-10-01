@@ -12,7 +12,7 @@ const Grid: React.FC = () => {
   const [list, setList] = useState(new Array<Audiobook>());
   const [loading, setLoading] = useState(true);
   const [hasMore, setHasMore] = useState(false);
-  const [query, setQuery] = useState('');
+  const [query] = useState('');
   const history = useHistory();
   const {fetchAuthenticated} = useAuth0();
 
