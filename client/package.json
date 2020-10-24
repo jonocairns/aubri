@@ -5,7 +5,7 @@
   "dependencies": {
     "@auth0/auth0-spa-js": "^1.6.5",
     "@svgr/cli": "^5.1.0",
-    "@testing-library/jest-dom": "^5.1.1",
+    "@testing-library/jest-dom": "^5.11.5",
     "@testing-library/react": "^10.0.3",
     "@testing-library/user-event": "^8.1.0",
     "@types/classnames": "^2.2.10",
