@@ -508,10 +508,10 @@
     "@types/connect" "*"
     "@types/node" "*"
 
-"@types/cheerio@^0.22.16":
-  version "0.22.16"
-  resolved "https://registry.yarnpkg.com/@types/cheerio/-/cheerio-0.22.16.tgz#c748a97b8a6f781b04bbda4a552e11b35bcc77e4"
-  integrity sha512-bSbnU/D4yzFdzLpp3+rcDj0aQQMIRUBNJU7azPxdqMpnexjUSvGJyDuOBQBHeOZh1mMKgsJm6Dy+LLh80Ew4tQ==
+"@types/cheerio@^0.22.25":
+  version "0.22.25"
+  resolved "https://registry.yarnpkg.com/@types/cheerio/-/cheerio-0.22.25.tgz#2f77c99922a3459373a873d55caaa049ead26fa0"
+  integrity sha512-Y2kmbk74dSGRI1bBmo67bowDoVxNm9cs+IPZznsFPRuBN6ToK2RCATZipOJsgO0Unbtiy01o0hP2SS+MKdUNvQ==
   dependencies:
     "@types/node" "*"
 
