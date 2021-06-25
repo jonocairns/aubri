@@ -1,0 +1,62 @@
+version: 2
+updates:
+- package-ecosystem: npm
+  directory: "/client"
+  schedule:
+    interval: daily
+    time: "17:00"
+  open-pull-requests-limit: 10
+  ignore:
+  - dependency-name: "@testing-library/user-event"
+    versions:
+    - 12.6.2
+    - 12.6.3
+    - 12.7.0
+    - 12.7.1
+    - 12.7.2
+    - 12.7.3
+    - 12.8.0
+    - 12.8.1
+    - 12.8.3
+    - 13.0.1
+    - 13.0.10
+    - 13.0.15
+    - 13.0.16
+    - 13.0.2
+    - 13.0.4
+    - 13.0.7
+    - 13.1.1
+    - 13.1.2
+  - dependency-name: "@testing-library/jest-dom"
+    versions:
+    - 5.11.10
+    - 5.11.9
+  - dependency-name: use-debounce
+    versions:
+    - 5.2.0
+    - 5.2.1
+    - 6.0.0
+  - dependency-name: react-content-loader
+    versions:
+    - 6.0.1
+    - 6.0.2
+  - dependency-name: handlebars
+    versions:
+    - 4.7.6
+- package-ecosystem: npm
+  directory: "/server"
+  schedule:
+    interval: daily
+    time: "17:00"
+  open-pull-requests-limit: 10
+  ignore:
+  - dependency-name: pg
+    versions:
+    - 8.5.1
+  - dependency-name: "@types/cheerio"
+    versions:
+    - 0.22.23
+    - 0.22.24
+    - 0.22.25
+    - 0.22.26
+    - 0.22.27
