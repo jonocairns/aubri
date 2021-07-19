@@ -32,7 +32,7 @@ A place to store your audiobooks
 Getting started:
 
 1. Clone the repository
-2. In the root folder run `docker-compose up`, this will spin up postgres (note: you may need to login (localhost:8080) to create a perminant login first)
+2. In the root folder run `docker-compose up`, this will spin up postgres (note: you may need to login (localhost:8080) to create a permanent login first)
 3. Open 2 terminals, one in `./client` and one in `./server`.
 4. Run `yarn install` in both client and server folders.
 5. Copy the `.env.example` to `.env` and set all the variables (in both client and server)
